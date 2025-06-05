@@ -3,6 +3,7 @@
 #include <array>
 
 #ifdef UNIT_TEST
+    #include "mock_arduino.h"
     #include "mock_pn532.h"  // Mock PN532 for unit testing
 #else
     #include <Arduino.h>

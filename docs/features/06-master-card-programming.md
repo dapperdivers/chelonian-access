@@ -1,7 +1,7 @@
 # Feature: Master Card Programming
 
-**Complexity**: 🟢 Low  
-**Hardware Required**: ✅ None  
+**Complexity**: 🟢 Low
+**Hardware Required**: ✅ None
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -19,7 +19,7 @@ Implement a master card system that allows authorized users to add or remove acc
 ## Programming Modes
 
 1. **Add Card Mode** - Next card scanned will be added
-2. **Remove Card Mode** - Next card scanned will be removed  
+2. **Remove Card Mode** - Next card scanned will be removed
 3. **Wipe All Mode** - Remove all cards except masters
 4. **Clone Mode** - Copy permissions from one card to another
 
@@ -68,13 +68,13 @@ Implement a master card system that allows authorized users to add or remove acc
   - [ ] Scan new card to add
   - [ ] Success/failure feedback
   - [ ] Auto-exit after operation
-  
+
 - [ ] **Remove Card Flow**:
   - [ ] Scan master card twice quickly
   - [ ] System enters remove mode
   - [ ] Scan card to remove
   - [ ] Confirmation feedback
-  
+
 - [ ] **Emergency Wipe**:
   - [ ] Scan master card 5 times
   - [ ] Warning sequence
@@ -103,7 +103,7 @@ Implement a master card system that allows authorized users to add or remove acc
   - [ ] Master cards cannot be removed via programming
   - [ ] Only master can add new masters
   - [ ] Master card timeout (30 seconds)
-  
+
 - [ ] **Anti-Tamper**:
   - [ ] Log all programming attempts
   - [ ] Failed master scan lockout
@@ -118,7 +118,7 @@ Implement a master card system that allows authorized users to add or remove acc
   - Scan multiple cards quickly
   - Exit with master card
   ```
-  
+
 - [ ] **Permission Cloning**:
   ```cpp
   // Copy access level from one card to another
@@ -127,7 +127,7 @@ Implement a master card system that allows authorized users to add or remove acc
   - Scan destination card(s)
   - Permissions copied
   ```
-  
+
 - [ ] **Temporary Programming**:
   - [ ] Time-limited programming access
   - [ ] One-time use programming cards

@@ -1,7 +1,7 @@
 # Feature: Flash Storage Persistence
 
-**Complexity**: 🟢 Low  
-**Hardware Required**: ✅ None (uses ESP32-C3's 4MB flash)  
+**Complexity**: 🟢 Low
+**Hardware Required**: ✅ None (uses ESP32-C3's 4MB flash)
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -39,27 +39,27 @@ Total Flash: 4MB
 - [ ] Create `FlashStorage` class using Preferences library:
   ```cpp
   #include <Preferences.h>
-  
+
   class FlashStorage {
   private:
       Preferences preferences;
       const char* namespace_config = "config";
       const char* namespace_uids = "uids";
       const char* namespace_logs = "logs";
-      
+
   public:
       void begin();
-      
+
       // Configuration
       bool saveConfig(const SystemConfig& config);
       bool loadConfig(SystemConfig& config);
-      
+
       // UID Management
       bool saveUID(const char* key, const uint8_t* uid, size_t length);
       bool removeUID(const char* key);
       size_t getUIDCount();
       bool getUID(size_t index, uint8_t* uid, size_t& length);
-      
+
       // Access Logging
       bool logAccess(const AccessLog& entry);
       size_t getLogCount();
@@ -71,25 +71,25 @@ Total Flash: 4MB
 - [ ] Initialize SPIFFS for larger data:
   ```cpp
   #include <SPIFFS.h>
-  
+
   class SPIFFSStorage {
   private:
       const size_t MAX_FILE_SIZE = 1048576; // 1MB
-      
+
   public:
       bool begin() {
           if (!SPIFFS.begin(true)) {
               Serial.println("SPIFFS Mount Failed");
               return false;
           }
-          
+
           // Check available space
           size_t totalBytes = SPIFFS.totalBytes();
           size_t usedBytes = SPIFFS.usedBytes();
           Serial.printf("SPIFFS: %d/%d bytes used\n", usedBytes, totalBytes);
           return true;
       }
-      
+
       bool writeFile(const char* path, const uint8_t* data, size_t len);
       bool readFile(const char* path, uint8_t* data, size_t& len);
       bool deleteFile(const char* path);
@@ -113,7 +113,7 @@ Total Flash: 4MB
       uint8_t bleEnabled = 1;       // Bluetooth on/off
       char blePIN[7] = "123456";    // BLE pairing PIN
   };
-  
+
   // UID storage entry
   struct UIDEntry {
       uint8_t uid[10];              // UID bytes (supports up to 10)
@@ -123,7 +123,7 @@ Total Flash: 4MB
       uint32_t validFrom;           // Validity start (epoch)
       uint32_t validUntil;          // Validity end (epoch)
   };
-  
+
   // Access log entry
   struct AccessLog {
       uint32_t timestamp;           // Event time (epoch)
@@ -141,23 +141,23 @@ Total Flash: 4MB
       // Initialize with false for read/write mode
       preferences.begin(namespace_config, false);
   }
-  
+
   bool FlashStorage::saveUID(const char* key, const uint8_t* uid, size_t length) {
       preferences.begin(namespace_uids, false);
-      
+
       // Store UID with metadata
       char uidKey[32];
       snprintf(uidKey, sizeof(uidKey), "uid_%s", key);
       size_t written = preferences.putBytes(uidKey, uid, length);
-      
+
       // Store UID count
       size_t count = preferences.getUInt("count", 0);
       preferences.putUInt("count", count + 1);
-      
+
       preferences.end();
       return written == length;
   }
-  
+
   bool FlashStorage::saveConfig(const SystemConfig& config) {
       preferences.begin(namespace_config, false);
       size_t written = preferences.putBytes("config", &config, sizeof(config));
@@ -175,42 +175,42 @@ Total Flash: 4MB
       struct tm timeinfo;
       getLocalTime(&timeinfo);
       strftime(filename, sizeof(filename), "/logs/%Y-%m.log", &timeinfo);
-      
+
       // Append to log file
       File file = SPIFFS.open(filename, FILE_APPEND);
       if (!file) {
           return false;
       }
-      
+
       size_t written = file.write((uint8_t*)&entry, sizeof(entry));
       file.close();
-      
+
       return written == sizeof(entry);
   }
-  
+
   bool SPIFFSStorage::exportLogsCSV(const char* month) {
       char logFile[32];
       snprintf(logFile, sizeof(logFile), "/logs/%s.log", month);
-      
+
       char csvFile[32];
       snprintf(csvFile, sizeof(csvFile), "/export/%s.csv", month);
-      
+
       File input = SPIFFS.open(logFile, FILE_READ);
       File output = SPIFFS.open(csvFile, FILE_WRITE);
-      
+
       // Write CSV header
       output.println("Timestamp,UID,Granted,Reason");
-      
+
       // Convert binary logs to CSV
       AccessLog entry;
       while (input.read((uint8_t*)&entry, sizeof(entry)) == sizeof(entry)) {
-          output.printf("%lu,%s,%d,%d\n", 
+          output.printf("%lu,%s,%d,%d\n",
               entry.timestamp,
               uidToString(entry.uid, entry.uidLength),
               entry.granted,
               entry.reason);
       }
-      
+
       input.close();
       output.close();
       return true;
@@ -223,7 +223,7 @@ Total Flash: 4MB
   void handleFileUpload() {
       HTTPUpload& upload = server.upload();
       static File uploadFile;
-      
+
       if (upload.status == UPLOAD_FILE_START) {
           String filename = upload.filename;
           if (!filename.startsWith("/")) filename = "/" + filename;
@@ -248,32 +248,32 @@ Total Flash: 4MB
       bool exportToJSON() {
           File backup = SPIFFS.open("/backup.json", FILE_WRITE);
           if (!backup) return false;
-          
+
           // Start JSON
           backup.print("{\n");
-          
+
           // Export config
           backup.print("  \"config\": ");
           exportConfig(backup);
           backup.print(",\n");
-          
+
           // Export UIDs
           backup.print("  \"uids\": ");
           exportUIDs(backup);
           backup.print("\n");
-          
+
           backup.print("}\n");
           backup.close();
           return true;
       }
-      
+
       bool importFromJSON() {
           File backup = SPIFFS.open("/backup.json", FILE_READ);
           if (!backup) return false;
-          
+
           // Parse JSON and restore
           // ... JSON parsing code
-          
+
           backup.close();
           return true;
       }

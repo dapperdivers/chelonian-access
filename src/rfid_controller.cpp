@@ -1,24 +1,21 @@
-#include <cstring>
-#include <array>
 #include "rfid_controller.h"
-
+#include <array>
+#include <cstring>
 
 RFIDController::RFIDController(uint8_t ss_pin)
-    : m_ss_pin(ss_pin)
-    , m_nfc(new AdafruitPN532(m_ss_pin))
-{
+    : m_ss_pin(ss_pin), m_nfc(new AdafruitPN532(m_ss_pin)) {
     // Using SPI interface with Adafruit_PN532
 }
 
 bool RFIDController::begin() {
     m_nfc->begin();
-    
+
     uint32_t versiondata = m_nfc->getFirmwareVersion();
     if (versiondata == 0u) {
         HardwareSerial::print(F("Didn't find PN53x board"));
         return false;
     }
-    
+
     // Configure board to read RFID tags
     m_nfc->samConfig();
     return true;
@@ -66,9 +63,12 @@ uint32_t RFIDController::getFirmwareVersion() {
 void RFIDController::printFirmwareVersion() {
     uint32_t versiondata = getFirmwareVersion();
     if (versiondata != 0u) {
-        HardwareSerial::print(F("Found chip PN5")); HardwareSerial::println((versiondata>>24) & 0xFF, HEX);
-        HardwareSerial::print(F("Firmware ver. ")); HardwareSerial::print((versiondata>>16) & 0xFF, DEC);
-        HardwareSerial::print('.'); HardwareSerial::println((versiondata>>8) & 0xFF, DEC);
+        HardwareSerial::print(F("Found chip PN5"));
+        HardwareSerial::println((versiondata >> 24) & 0xFF, HEX);
+        HardwareSerial::print(F("Firmware ver. "));
+        HardwareSerial::print((versiondata >> 16) & 0xFF, DEC);
+        HardwareSerial::print('.');
+        HardwareSerial::println((versiondata >> 8) & 0xFF, DEC);
     }
 }
 
@@ -77,7 +77,7 @@ void RFIDController::initializeDefaultUIDs() {
     std::array<uint8_t, 4> testUID4B = {0xB4, 0x12, 0x34, 0x56};
     std::array<uint8_t, 7> testUiD7B1 = {0x04, 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC};
     std::array<uint8_t, 7> testUiD7B2 = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD};
-    
+
     addUID4B(testUID4B.data());
     addUID7B(testUiD7B1.data());
     addUID7B(testUiD7B2.data());

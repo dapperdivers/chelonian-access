@@ -41,7 +41,7 @@ Chelonian Access is a modern, security-focused RFID access control system built 
                 ┌──────▼──────┐    ┌─────▼─────┐
                 │ Door Locks  │    │  Speaker  │
                 └─────────────┘    └───────────┘
-                
+
                     ┌─────────────┐
                     │  Mini360    │
                     │ Buck Conv.  │

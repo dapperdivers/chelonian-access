@@ -25,7 +25,7 @@ This document outlines what features are currently implemented versus what's pos
 - Three levels of access denied sounds
 - Volume control via JQ6500 commands
 
-#### 3. **Relay Control**  
+#### 3. **Relay Control**
 - 4 relay outputs (active LOW)
 - Relay 1 activates for 10 seconds on valid card
 - Automatic deactivation after timeout
@@ -194,7 +194,7 @@ This document outlines what features are currently implemented versus what's pos
 ## Hardware Utilization Summary
 
 - **ESP32-C3**: ~20% of capabilities used
-- **PN532**: ~20% of capabilities used  
+- **PN532**: ~20% of capabilities used
 - **JQ6500**: ~30% of capabilities used
 - **Relays**: 25% of channels used
 - **Power Supply**: Properly utilized

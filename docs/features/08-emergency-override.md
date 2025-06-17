@@ -1,7 +1,7 @@
 # Feature: Emergency Override
 
-**Complexity**: 🟢 Low  
-**Hardware Required**: 🔧 Minor (Physical button or none)  
+**Complexity**: 🟢 Low
+**Hardware Required**: 🔧 Minor (Physical button or none)
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -72,22 +72,22 @@ Implement emergency override mechanisms for situations where normal access metho
   - [ ] Glass break sensor
   - [ ] Remote command
   - [ ] Power failure (configurable)
-  
+
 - [ ] **System Response**:
   ```cpp
   void handleEmergencyOverride() {
       // 1. Activate all door relays
       relays.setAllRelays(true);
-      
+
       // 2. Disable normal card reading
       emergencyMode = true;
-      
+
       // 3. Log emergency event
       logger.logEmergency(source, timestamp);
-      
+
       // 4. Sound alarm (if configured)
       audio.playTrack(SOUND_EMERGENCY);
-      
+
       // 5. Send notifications
       remote.sendAlert("EMERGENCY OVERRIDE ACTIVATED");
   }
@@ -112,7 +112,7 @@ Implement emergency override mechanisms for situations where normal access metho
   - [ ] "Push to Exit" signage
   - [ ] LED illumination
   - [ ] ADA compliant height
-  
+
 - [ ] **Outdoor Emergency Access**:
   - [ ] Knox box integration
   - [ ] Weatherproof enclosure
@@ -125,7 +125,7 @@ Implement emergency override mechanisms for situations where normal access metho
   - [ ] Strobe light activation
   - [ ] LED status indicators
   - [ ] Voice announcement
-  
+
 - [ ] **Remote Alerts**:
   - [ ] SMS/Email notifications
   - [ ] Security system integration
@@ -138,17 +138,17 @@ Implement emergency override mechanisms for situations where normal access metho
   void resetEmergencyMode() {
       // 1. Verify authorized reset
       if (!checkResetAuthorization()) return;
-      
+
       // 2. Return to normal operation
       emergencyMode = false;
-      
+
       // 3. Re-lock doors (with delay)
       delay(EXIT_DELAY);
       relays.setAllRelays(false);
-      
+
       // 4. Log reset event
       logger.logReset(resetUser, timestamp);
-      
+
       // 5. System check
       performSystemCheck();
   }

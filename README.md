@@ -7,6 +7,13 @@
 
 A modern, secure RFID access control system, now known as Chelonian Access (formerly Simple Sexy AC), built on the ESP32-C3 SuperMini platform. This project takes the original SimpleSexyAC concept and transforms it into a robust, testable, and expandable access control system.
 
+## 🚀 Getting Started
+
+- [Development Environment Setup Guide](docs/guides/DEVELOPMENT_SETUP.md) - Complete guide to setting up your development environment
+- [Hardware Setup Guide](docs/HARDWARE_GUIDE.md) - Instructions for assembling and connecting hardware
+- [Project Overview](docs/PROJECT_OVERVIEW.md) - Architecture and design overview
+- [Current Features](docs/CURRENT_FEATURES.md) - Detailed feature documentation
+
 ## ✨ Current Features
 
 ### 🔐 **RFID Access Control**
@@ -56,7 +63,7 @@ A modern, secure RFID access control system, now known as Chelonian Access (form
 ### Core Documentation
 
 - **[Project Overview](docs/PROJECT_OVERVIEW.md)** - Complete system architecture and capabilities
-- **[Hardware Guide](docs/HARDWARE_GUIDE.md)** - Detailed component specifications  
+- **[Hardware Guide](docs/HARDWARE_GUIDE.md)** - Detailed component specifications
 - **[Current Features](docs/CURRENT_FEATURES.md)** - Implemented vs. possible features
 
 ### Enhancement Guides
@@ -140,7 +147,7 @@ These enhancements require no additional hardware and can significantly improve 
 The [Feature Roadmap](docs/features/feature-roadmap.md) contains detailed guides for many more potential enhancements, including:
 
 - **Wireless Features** - WiFi portal, BLE integration, OTA updates, MQTT support
-- **Enhanced Security** - Multiple access levels, logging, time-based access, emergency override  
+- **Enhanced Security** - Multiple access levels, logging, time-based access, emergency override
 - **Advanced Features** - Battery backup, dual authentication, scheduled relay control
 
 All enhancements are documented with implementation guides, hardware requirements, and code examples.

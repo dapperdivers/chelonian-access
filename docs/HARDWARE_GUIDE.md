@@ -259,7 +259,7 @@ ESP32-C3 SuperMini
 │                 │
 │  10 ─────────── │──── PN532 SS
 │  MISO ────────── │──── PN532 MISO
-│  MOSI ────────── │──── PN532 MOSI  
+│  MOSI ────────── │──── PN532 MOSI
 │  SCK ─────────── │──── PN532 SCK
 │                 │
 │  9 ──────────── │──── Relay 1 (Door)

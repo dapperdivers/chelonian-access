@@ -1,7 +1,7 @@
 # Feature: Multiple Access Levels
 
-**Complexity**: 🟡 Medium  
-**Hardware Required**: ✅ None  
+**Complexity**: 🟡 Medium
+**Hardware Required**: ✅ None
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -65,24 +65,24 @@ Implement different access levels for different RFID cards, allowing for role-ba
   - [ ] Extended door unlock time (30 seconds)
   - [ ] Can enter programming mode
   - [ ] No time restrictions
-  
+
 - [ ] **User Level**:
   - [ ] Standard relay activation (Relay 1)
   - [ ] Normal unlock time (10 seconds)
   - [ ] Optional time-of-day restrictions
-  
+
 - [ ] **Service Level**:
   - [ ] Specific relay activation (e.g., Relay 2 for hood release)
   - [ ] Time window restrictions (e.g., 8 AM - 5 PM)
   - [ ] Day-of-week restrictions
   - [ ] Access logging required
-  
+
 - [ ] **Guest Level**:
   - [ ] Limited relay access
   - [ ] Card expiration date checking
   - [ ] Reduced unlock time (5 seconds)
   - [ ] Access count limitations
-  
+
 - [ ] **Emergency Level**:
   - [ ] All relays activate immediately
   - [ ] Bypass all time restrictions

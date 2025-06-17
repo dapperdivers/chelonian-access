@@ -2,26 +2,26 @@
 #include "test_helpers.h"
 
 // Declare test functions
-void test_relay_initial_state(void);
-void test_set_single_relay(void);
-void test_set_all_relays(void);
-void test_invalid_relay_number(void);
-void test_relay_state_transitions(void);
-void test_rapid_relay_switching(void);
-void test_sequential_relay_operations(void);
+void testRelayInitialState();
+void testSetSingleRelay();
+void testSetAllRelays();
+void testInvalidRelayNumber();
+void testRelayStateTransitions();
+void testRapidRelaySwitching();
+void testSequentialRelayOperations();
 
 // setUp and tearDown are defined in test_helpers.cpp
 
-int main(int argc, char **argv) {
+int main(int /*argc*/, char** /*argv*/) {
     UNITY_BEGIN();
-    
-    RUN_TEST(test_relay_initial_state);
-    RUN_TEST(test_set_single_relay);
-    RUN_TEST(test_set_all_relays);
-    RUN_TEST(test_invalid_relay_number);
-    RUN_TEST(test_relay_state_transitions);
-    RUN_TEST(test_rapid_relay_switching);
-    RUN_TEST(test_sequential_relay_operations);
-    
+
+    RUN_TEST(testRelayInitialState);
+    RUN_TEST(testSetSingleRelay);
+    RUN_TEST(testSetAllRelays);
+    RUN_TEST(testInvalidRelayNumber);
+    RUN_TEST(testRelayStateTransitions);
+    RUN_TEST(testRapidRelaySwitching);
+    RUN_TEST(testSequentialRelayOperations);
+
     return UNITY_END();
 }

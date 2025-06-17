@@ -1,7 +1,7 @@
 # Feature: Low Power Sleep Mode
 
-**Complexity**: 🟢 Low  
-**Hardware Required**: 🔧 Minor (Capacitive button or switch)  
+**Complexity**: 🟢 Low
+**Hardware Required**: 🔧 Minor (Capacitive button or switch)
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -61,7 +61,7 @@ Implement ultra-low power deep sleep mode for the ESP32-C3 SuperMini, reducing p
   - [ ] No external hardware needed!
   - [ ] Weather-resistant metal surface
   - [ ] Adjustable sensitivity
-  
+
 - [ ] **PIR Motion Sensor**:
   - [ ] HC-SR501 PIR sensor (~$2)
   - [ ] Connect to any GPIO
@@ -78,33 +78,33 @@ Implement ultra-low power deep sleep mode for the ESP32-C3 SuperMini, reducing p
   ```cpp
   #include <esp_sleep.h>
   #include <esp_pm.h>
-  
+
   void PowerSaveController::forceSleep() {
       // Configure wake up sources
       esp_sleep_enable_ext0_wakeup(wakePin, 0);
-      
+
       // Optional: Timer wakeup (e.g., every hour)
       // esp_sleep_enable_timer_wakeup(3600 * 1000000ULL);
-      
+
       // Optional: Touch wakeup
       // esp_sleep_enable_touchpad_wakeup();
-      
+
       // Store data in RTC memory
       bootCount++;
-      
+
       // Enter deep sleep
       Serial.println("Going to sleep...");
       Serial.flush();
       esp_deep_sleep_start();
   }
-  
+
   bool PowerSaveController::isWakeFromSleep() {
       return esp_sleep_get_wakeup_cause() != ESP_SLEEP_WAKEUP_UNDEFINED;
   }
-  
+
   esp_sleep_wakeup_cause_t PowerSaveController::getWakeupReason() {
       esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
-      
+
       switch(wakeup_reason) {
           case ESP_SLEEP_WAKEUP_EXT0:
               Serial.println("Wakeup by external signal (RTC_IO)");
@@ -130,30 +130,30 @@ Implement ultra-low power deep sleep mode for the ESP32-C3 SuperMini, reducing p
       // Turn off WiFi
       WiFi.disconnect(true);
       WiFi.mode(WIFI_OFF);
-      
+
       // Turn off Bluetooth
       btStop();
-      
+
       // Power down RFID (via GPIO or MOSFET)
       digitalWrite(RFID_POWER_PIN, LOW);
-      
+
       // Mute audio
       digitalWrite(JQ6500_POWER_PIN, LOW);
-      
+
       // Turn off LEDs
       digitalWrite(8, LOW); // Blue LED
-      
+
       // Flush serial buffers
       Serial.flush();
   }
   ```
-  
+
 - [ ] **After Wake**:
   ```cpp
   void wakeupInit() {
       // Check wake reason
       esp_sleep_wakeup_cause_t wakeup_reason = getWakeupReason();
-      
+
       // Re-initialize based on wake reason
       if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT0) {
           // Quick wake for card scan
@@ -172,7 +172,7 @@ Implement ultra-low power deep sleep mode for the ESP32-C3 SuperMini, reducing p
   - [ ] Monitor last button press
   - [ ] Monitor last WiFi/BLE activity
   - [ ] Sleep after configurable timeout (e.g., 30 seconds)
-  
+
 - [ ] **Smart Wake Conditions**:
   - [ ] GPIO interrupt (button/PIR)
   - [ ] Touch sensor activation
@@ -185,11 +185,11 @@ Implement ultra-low power deep sleep mode for the ESP32-C3 SuperMini, reducing p
   void setupTouch() {
       // Initialize touch pad
       touchAttachInterrupt(T0, touchCallback, TOUCH_THRESHOLD);
-      
+
       // Configure for sleep wakeup
       esp_sleep_enable_touchpad_wakeup();
   }
-  
+
   void touchCallback() {
       // Touch detected - reset activity timer
       powerSave.resetActivityTimer();

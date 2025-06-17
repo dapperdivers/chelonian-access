@@ -1,7 +1,7 @@
 # Feature: Time-Based Access Control
 
-**Complexity**: 🟡 Medium  
-**Hardware Required**: 🔧 Minor (RTC module)  
+**Complexity**: 🟡 Medium
+**Hardware Required**: 🔧 Minor (RTC module)
 **User Value**: ⭐⭐ Nice-to-have
 
 ## Overview
@@ -50,7 +50,7 @@ Implement time-based restrictions for access control, allowing cards to work onl
       uint8_t endHour;
       uint8_t endMinute;
   };
-  
+
   struct DateRange {
       uint32_t startDate; // Unix timestamp
       uint32_t endDate;   // Unix timestamp
@@ -82,12 +82,12 @@ Implement time-based restrictions for access control, allowing cards to work onl
   - [ ] Monday-Friday, 8 AM - 6 PM
   - [ ] Exclude weekends
   - [ ] Holiday calendar support
-  
+
 - [ ] **Shift-Based**:
   - [ ] Morning shift: 6 AM - 2 PM
   - [ ] Evening shift: 2 PM - 10 PM
   - [ ] Night shift: 10 PM - 6 AM
-  
+
 - [ ] **Custom Schedules**:
   - [ ] Per-card time windows
   - [ ] Multiple time windows per day
@@ -107,15 +107,15 @@ Implement time-based restrictions for access control, allowing cards to work onl
 - [ ] **Daylight Saving Time**:
   - [ ] Automatic DST adjustment
   - [ ] Timezone configuration
-  
+
 - [ ] **One-Time Access**:
   - [ ] Single-use time windows
   - [ ] Auto-expire after use
-  
+
 - [ ] **Recurring Events**:
   - [ ] Weekly cleaning crew access
   - [ ] Monthly maintenance windows
-  
+
 - [ ] **Early Warning**:
   - [ ] LED/audio warning 5 minutes before lockout
   - [ ] Grace period for active sessions

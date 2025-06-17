@@ -2,8 +2,8 @@
 #define TEST_HELPERS_H
 
 #include <unity.h>
-#include "mock_arduino.h"
 #include "audio_player.h"
+#include "mock_arduino.h"
 #include "relay_controller.h"
 #include "rfid_controller.h"
 
@@ -11,11 +11,9 @@
 class AudioTestFixture {
 public:
     AudioPlayer* audio;
-    
-    AudioTestFixture() {
-        audio = new AudioPlayer(8, 7);
-    }
-    
+
+    AudioTestFixture() : audio(new AudioPlayer(8, 7)) {}
+
     ~AudioTestFixture() {
         delete audio;
     }
@@ -24,12 +22,11 @@ public:
 class RelayTestFixture {
 public:
     RelayController* relays;
-    
-    RelayTestFixture() {
-        relays = new RelayController();
+
+    RelayTestFixture() : relays(new RelayController()) {
         relays->begin();
     }
-    
+
     ~RelayTestFixture() {
         relays->setAllRelays(false);
         delete relays;
@@ -43,19 +40,19 @@ public:
         uint8_t invalidAttempts;
         uint8_t lastPlayedTrack;
         millis_t relayActivatedTime;
-        
+
         void reset() {
             relayActive = false;
             invalidAttempts = 0;
             lastPlayedTrack = 0;
             relayActivatedTime = 0;
         }
-    } state;
-    
+    } state{};
+
     IntegrationTestFixture() {
         state.reset();
     }
-    
+
     ~IntegrationTestFixture() {
         state.reset();
     }
@@ -64,12 +61,11 @@ public:
 class RFIDTestFixture {
 public:
     RFIDController* rfid;
-    
-    RFIDTestFixture() {
+
+    RFIDTestFixture() : rfid(new RFIDController(10)) {
         // Don't reset mock state here - it's already done in setUp()
-        rfid = new RFIDController(10);
     }
-    
+
     ~RFIDTestFixture() {
         delete rfid;
     }
@@ -81,14 +77,14 @@ extern RelayTestFixture* relayFixture;
 extern IntegrationTestFixture* integrationFixture;
 extern RFIDTestFixture* rfidFixture;
 
-void setUp(void);
-void tearDown(void);
+void setUp();
+void tearDown();
 
 // Integration test helper functions
 void advanceMockTime(millis_t ms);
-millis_t getTotalDelayTime(void);
+millis_t getTotalDelayTime();
 uint8_t getPinTransitionCount(uint8_t pin);
 void resetMockState();
 bool verifyPinSequence(uint8_t pin, const uint8_t* expectedStates, uint8_t stateCount);
 
-#endif // TEST_HELPERS_H
+#endif  // TEST_HELPERS_H

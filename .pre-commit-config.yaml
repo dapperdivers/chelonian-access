@@ -1,0 +1,23 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+
+-   repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v20.1.6
+    hooks:
+    -   id: clang-format
+        types_or: [c++, c, header]
+        args: [--style=file]
+
+-   repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
+    hooks:
+    -   id: oclint
+        args: [--enable-clang-static-analyzer]
+    -   id: uncrustify
+        args: [--replace, --no-backup]

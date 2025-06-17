@@ -1,7 +1,7 @@
 # Feature: Battery Backup
 
-**Complexity**: 🟡 Medium  
-**Hardware Required**: 🏗️ Major (Battery, charging circuit)  
+**Complexity**: 🟡 Medium
+**Hardware Required**: 🏗️ Major (Battery, charging circuit)
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -64,7 +64,7 @@ With deep sleep enabled (43μA base):
   - [ ] LiPo battery pack (3.7V-7.4V)
   - [ ] LiFePO4 (3.2V, safer chemistry)
   - [ ] USB power bank (5V output ready)
-  
+
 - [ ] **Charging Circuit**:
   - [ ] TP4056 for single Li-ion
   - [ ] CN3791 for solar + battery
@@ -80,7 +80,7 @@ With deep sleep enabled (43μA base):
                                     Diode
                                       |
   Battery Pack ----> Boost (5V) ---Diode----> System
-  
+
   // Or use power management IC like LTC4412
   ```
 - [ ] Zero-downtime switching
@@ -94,11 +94,11 @@ With deep sleep enabled (43μA base):
       // Configure wake sources
       esp_sleep_enable_timer_wakeup(sleep_time_us);
       esp_sleep_enable_ext0_wakeup(GPIO_NUM_0, 0); // Wake on button
-      
+
       // Power down peripherals
       esp_wifi_stop();
       esp_bt_controller_disable();
-      
+
       // Enter deep sleep (43μA)
       esp_deep_sleep_start();
   }
@@ -110,10 +110,10 @@ With deep sleep enabled (43μA base):
           // Disable WiFi/BLE
           WiFi.mode(WIFI_OFF);
           btStop();
-          
+
           // Reduce CPU frequency
           setCpuFrequencyMhz(80); // From 160MHz
-          
+
           // Enable light sleep
           esp_pm_config_esp32c3_t pm_config = {
               .max_freq_mhz = 80,
@@ -131,17 +131,17 @@ With deep sleep enabled (43μA base):
   float readBatteryVoltage() {
       // Use ESP32 ADC with calibration
       uint32_t adc_reading = 0;
-      
+
       // Multisampling for accuracy
       for (int i = 0; i < 64; i++) {
           adc_reading += adc1_get_raw(ADC1_CHANNEL_0);
       }
       adc_reading /= 64;
-      
+
       // Convert to voltage with calibration
       uint32_t voltage = esp_adc_cal_raw_to_voltage(
           adc_reading, &adc_chars);
-      
+
       // Account for voltage divider
       return (voltage / 1000.0) * DIVIDER_RATIO;
   }
@@ -170,20 +170,20 @@ With deep sleep enabled (43μA base):
   ```cpp
   void emergencyPowerMode() {
       // ESP32-C3 specific optimizations
-      
+
       // Disable all non-essential peripherals
       esp_wifi_stop();
       btStop();
-      
+
       // Keep only RFID functional
       audio.disable();
       digitalWrite(8, LOW); // Blue LED off
-      
+
       // Use ULP for ultra-low power monitoring
       if (batteryPercent < 2) {
           // Save state to NVS
           preferences.putBytes("last_state", &system_state, sizeof(system_state));
-          
+
           // Enter hibernation (5μA)
           esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
           esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_OFF);

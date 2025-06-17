@@ -1,7 +1,7 @@
 # Feature: Scheduled Relay Control
 
-**Complexity**: 🟡 Medium  
-**Hardware Required**: 🔧 Minor (RTC module)  
+**Complexity**: 🟡 Medium
+**Hardware Required**: 🔧 Minor (RTC module)
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -33,7 +33,7 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
   struct RelaySchedule {
       bool enabled;
       uint8_t relayNumber;
-      
+
       // Time windows (up to 4 per relay)
       struct TimeWindow {
           uint8_t startHour;
@@ -43,11 +43,11 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
           uint8_t daysOfWeek;  // Bitmask: Sun=1, Mon=2, etc.
           bool active;
       } windows[4];
-      
+
       // Date restrictions
       uint32_t validFrom;    // Unix timestamp (0 = no restriction)
       uint32_t validUntil;   // Unix timestamp (0 = no restriction)
-      
+
       // Override settings
       bool overrideActive;
       bool overrideState;    // ON/OFF during override
@@ -63,28 +63,28 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
       DateTime lastCheck;
       RelayController* relayCtrl;
       TimeController* timeCtrl;
-      
+
   public:
       bool begin(RelayController* rc, TimeController* tc);
       void checkSchedules();  // Call frequently in loop()
-      
+
       // Schedule management
       void setSchedule(uint8_t relay, const RelaySchedule& schedule);
       RelaySchedule getSchedule(uint8_t relay);
       void enableSchedule(uint8_t relay, bool enable);
-      
+
       // Time window management
-      void addTimeWindow(uint8_t relay, uint8_t window, 
+      void addTimeWindow(uint8_t relay, uint8_t window,
                         uint8_t startH, uint8_t startM,
                         uint8_t endH, uint8_t endM,
                         uint8_t days);
       void removeTimeWindow(uint8_t relay, uint8_t window);
-      
+
       // Override functions
       void setOverride(uint8_t relay, bool state, uint32_t duration);
       void clearOverride(uint8_t relay);
       void clearAllOverrides();
-      
+
       // Persistence
       void saveSchedules();
       void loadSchedules();
@@ -103,7 +103,7 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
           {10, 0, 14, 0, 0b01000000, true}, // Sat 10AM-2PM
       }
   };
-  
+
   // Security Lighting (Dusk to Dawn)
   RelaySchedule securityLighting = {
       .enabled = true,
@@ -113,7 +113,7 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
           {0, 0, 6, 30, 0b11111111, true},    // Midnight-6:30AM
       }
   };
-  
+
   // HVAC Schedule
   RelaySchedule hvacSchedule = {
       .enabled = true,
@@ -134,11 +134,11 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
       float longitude;
       int8_t timezone;
   };
-  
-  void calculateSunriseSunset(DateTime date, 
-                              float& sunrise, 
+
+  void calculateSunriseSunset(DateTime date,
+                              float& sunrise,
                               float& sunset);
-  
+
   // Automatic adjustment for outdoor lighting
   void adjustForDaylight(RelaySchedule& schedule);
   ```
@@ -152,7 +152,7 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
       bool skipSchedule;  // Skip normal schedule
       RelaySchedule override;  // Special schedule
   };
-  
+
   Holiday holidays[20];  // Store up to 20 holidays
   ```
 
@@ -209,7 +209,7 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
 ### Phase 7: Visual Feedback
 - [ ] LED indicators for schedule status:
   - Solid: Schedule active, relay on
-  - Slow blink: Schedule active, relay off  
+  - Slow blink: Schedule active, relay off
   - Fast blink: Override active
   - Off: Schedule disabled
 
@@ -224,7 +224,7 @@ Enable time-based scheduling for relay activation and deactivation, allowing rel
 ```
 Address    Content
 200-299    Relay 1 Schedules
-300-399    Relay 2 Schedules  
+300-399    Relay 2 Schedules
 400-499    Relay 3 Schedules
 500-599    Relay 4 Schedules
 600-649    Holidays

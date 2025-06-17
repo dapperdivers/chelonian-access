@@ -4,10 +4,11 @@
 HardwareSerial audioSerial(1);
 
 AudioPlayer::AudioPlayer(uint8_t rx_pin, uint8_t tx_pin)
-    : m_rx_pin(rx_pin)
-    , m_tx_pin(tx_pin)
+    : m_rx_pin(rx_pin),
+      m_tx_pin(tx_pin)
 #ifdef USINGMP3
-    , serial(&audioSerial)
+      ,
+      serial(&audioSerial)
 #endif
 {
 }
@@ -17,19 +18,19 @@ bool AudioPlayer::begin() {
     // Initialize UART1 with JQ6500 communication parameters
     audioSerial.begin(9600, SERIAL_8N1, m_rx_pin, m_tx_pin);
     delay(500);
-    
+
     // Create JQ6500 instance with our serial connection
     player = new JQ6500Serial(audioSerial);
-    
+
     reset();  // Reset JQ6500 on startup
     delay(500);
-    
+
     // Ensure we're using built-in flash memory (not SD card)
     setSource(MP3_SRC_BUILTIN);
     delay(100);
-    
+
     player->setVolume(m_current_volume);
-    
+
     audio_enabled = true;
     m_initialized = true;
     return true;
@@ -43,14 +44,14 @@ void AudioPlayer::setVolume(uint8_t volume) {
     if (!m_initialized) {
         return;
     }
-    
+
     // Clamp volume between 0-30
     if (volume > 30) {
         m_current_volume = 30;
     } else {
         m_current_volume = volume;
     }
-    
+
 #ifdef USINGMP3
     if (audio_enabled) {
         player->setVolume(m_current_volume);
@@ -62,7 +63,7 @@ void AudioPlayer::playTrack(uint8_t track) const {
     if (!m_initialized) {
         return;
     }
-    
+
 #ifdef USINGMP3
     if (audio_enabled) {
         player->playFileByIndexNumber(track);
@@ -83,7 +84,7 @@ uint8_t AudioPlayer::getStatus() const {
     if (!m_initialized || !audio_enabled) {
         return MP3_STATUS_STOPPED;
     }
-    
+
     uint8_t status = player->getStatus();
     return status;
 #else
@@ -96,7 +97,7 @@ uint8_t AudioPlayer::getVolume() const {
     if (!m_initialized || !audio_enabled) {
         return 0;
     }
-    
+
     // Return cached value as getVolume() from JQ6500 can be unreliable
     return m_current_volume;
 #else
@@ -109,7 +110,7 @@ uint16_t AudioPlayer::getCurrentPosition() const {
     if (!m_initialized || !audio_enabled) {
         return 0;
     }
-    
+
     return player->currentFilePositionInSeconds();
 #else
     return 0;
@@ -121,7 +122,7 @@ void AudioPlayer::setSource(uint8_t source) {
     if (!m_initialized || !audio_enabled) {
         return;
     }
-    
+
     // Only allow built-in flash or SD card sources
     if (source == MP3_SRC_BUILTIN || source == MP3_SRC_SDCARD) {
         m_current_source = source;

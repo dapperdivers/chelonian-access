@@ -60,7 +60,7 @@ Use the ESP32-C3 SuperMini's onboard blue LED (GPIO8) to provide visual feedback
   - [ ] WiFi connected: Triple blink then solid
   - [ ] Waiting (after 10s): Double blink every 2 seconds
   - [ ] Card detected: Rapid blink
-  
+
 - [ ] **Access States**:
   - [ ] Valid card: 3 fast blinks then solid for 2 seconds
   - [ ] Invalid card: 5 very rapid flashes
@@ -100,14 +100,14 @@ public:
     void setPattern(LEDPattern pattern);
     void playSequence(LEDPattern* patterns, uint8_t count);
     void setBrightness(uint8_t level); // 0-255 using PWM
-    
+
 private:
     uint8_t pin;
     LEDPattern current_pattern;
     unsigned long last_update;
     uint8_t pattern_state;
     uint8_t brightness;
-    
+
     // ESP32 PWM specific
     uint8_t pwm_channel;
     void setupPWM();
@@ -132,12 +132,12 @@ void LEDController::setBrightness(uint8_t level) {
 void LEDController::breathe() {
     static uint8_t brightness = 0;
     static int8_t direction = 1;
-    
+
     brightness += direction;
     if (brightness == 255 || brightness == 0) {
         direction = -direction;
     }
-    
+
     ledcWrite(pwm_channel, brightness);
 }
 ```

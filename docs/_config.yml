@@ -20,7 +20,7 @@ footer_content: "Copyright &copy; 2025 DapperDivers. MIT License."
 aux_links:
   "GitHub Repository":
     - "//github.com/dapperdivers/chelonian-access"
-    
+
 # Navigation structure
 nav_order_separator: 1000
 

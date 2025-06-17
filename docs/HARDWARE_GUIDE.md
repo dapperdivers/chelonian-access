@@ -16,7 +16,7 @@ This document provides detailed information about each hardware component used i
 **Specifications:**
 
 - Microcontroller: ESP32-C3 (RISC-V)
-- Operating Voltage: 3.3V (with 5V input via USB-C)
+- Operating Voltage: 5V (native)
 - Clock Speed: 160MHz
 - Flash Memory: 4MB
 - RAM: 400KB SRAM

@@ -1,4 +1,7 @@
 name: Release Build
+permissions:
+  contents: read
+  pull-requests: write
 
 on:
   release:

@@ -23,6 +23,7 @@ A modern, modular RFID keyless entry system built on the ESP32-C3 SuperMini plat
 - [Hardware Guide](HARDWARE_GUIDE.html) - Detailed component specifications
 - [Current Features](CURRENT_FEATURES.html) - Implemented vs. possible features
 - [Feature Roadmap](features/feature-roadmap.html) - Comprehensive enhancement guide
+- [Development Setup](guides/DEVELOPMENT_SETUP.html) - Detailed Guide to local development
 
 ### About the Project
 

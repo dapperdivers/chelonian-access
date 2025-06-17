@@ -1,5 +1,5 @@
 # Site settings
-title: "Chelonian Access Documentation"
+title: "Chelonian Access"
 description: >-
   Modern, modular RFID Access System
 baseurl: "/chelonian-access"
@@ -26,18 +26,37 @@ nav_order_separator: 1000
 
 # Collections for better organization
 collections:
+  guides:
+    permalink: "/:collection/:path/"
+    output: true
   features:
     permalink: "/:collection/:path/"
     output: true
-  development:
-    permalink: "/:collection/:path/"
-    output: true
 
+# Navigation Configuration
 just_the_docs:
   collections:
-    features:
-      name: Feature Guides
+    guides:
+      name: Guides
       nav_order: 4
-    development:
-      name: Development
+    features:
+      name: Features
+      nav_fold: true  # This will make the features section collapsible
       nav_order: 5
+
+# Default front matter settings
+defaults:
+  -
+    scope:
+      path: ""
+      type: "guides"
+    values:
+      layout: "page"
+      parent: "Guides"
+  -
+    scope:
+      path: ""
+      type: "features"
+    values:
+      layout: "page"
+      parent: "Features"

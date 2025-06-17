@@ -5,13 +5,15 @@ This guide will help you set up your development environment for working on the 
 ## Prerequisites
 
 - Linux-based operating system (Ubuntu/Debian recommended)
-- Git
-- curl
-- Basic development tools
+- Git (for version control)
+- curl (for downloading tools)
+- Basic development tools (build-essential, gcc, g++, make)
+- Python 3.7 or higher (for PlatformIO)
 
 ## Step 1: Install mise (Tool Version Manager)
 
 1. Install mise:
+
    ```bash
    curl https://mise.run | sh
    ```
@@ -19,37 +21,51 @@ This guide will help you set up your development environment for working on the 
 2. Add mise to your shell (choose one based on your shell):
 
    For zsh (add to ~/.zshrc):
+
    ```bash
    echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
    source ~/.zshrc
    ```
 
    For bash (add to ~/.bashrc):
+
    ```bash
    echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
    source ~/.bashrc
    ```
 
+## Step 2: Install Basic System Dependencies
+
+If you haven't already, install the required system packages:
+
+```bash
+sudo apt update
+sudo apt install -y build-essential gcc g++ make python3 python3-pip
+```
+
 ## Step 3: Clone and Set Up the Project
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-username/chelonian-access.git
    cd chelonian-access
    ```
 
 2. Let mise install all required tools and dependencies:
+
    ```bash
    mise setup
    ```
 
    This will automatically install:
-   - clang-format (v17.0.6)
-   - clang-tidy
-   - cppcheck
-   - uncrustify
-   - OCLint
-   - pre-commit hooks
+   - PlatformIO (for embedded development)
+   - clang-format (v17.0.6) - Code formatter
+   - clang-tidy - Static analyzer
+   - cppcheck - Static analysis tool
+   - uncrustify - Code beautifier
+   - OCLint - Static code analysis
+   - pre-commit hooks - Automated code quality checks
 
 ## Step 4: Initialize Pre-commit Hooks
 
@@ -81,19 +97,40 @@ Run the following commands to verify your setup:
    mise run lint
    ```
 
+4. Verify PlatformIO installation:
+
+   ```bash
+   mise run verify-pio
+   ```
+
 ## Common Tasks
 
 - Run all linters:
+
   ```bash
   mise run lint
   ```
 
+- Build the project:
+
+  ```bash
+  mise run build
+  ```
+
+- Run tests:
+
+  ```bash
+  mise run test
+  ```
+
 - Install new dependencies:
+
   ```bash
   mise run install-deps
   ```
 
 - Update OCLint:
+
   ```bash
   mise run install-oclint
   ```
@@ -122,6 +159,14 @@ To verify what's installed and what's missing:
 mise run verify-dev-tools
 ```
 
+### PlatformIO Issues
+
+If you encounter PlatformIO-related issues:
+
+```bash
+mise run repair-pio
+```
+
 ### Pre-commit Hook Issues
 
 If pre-commit hooks aren't running:
@@ -138,6 +183,7 @@ Our key development configuration files:
 - `.pre-commit-config.yaml` - Linting and code quality checks configuration
 - `.clang-format` - C++ code formatting rules
 - `.clang-tidy` - Static analyzer configuration
+- `platformio.ini` - PlatformIO project configuration
 
 ## Next Steps
 
@@ -148,6 +194,7 @@ Our key development configuration files:
 ## Need Help?
 
 If you encounter any issues not covered in this guide:
+
 1. Check the existing GitHub issues
 2. Review our documentation in the `docs/` directory
 3. Create a new issue with detailed information about your problem

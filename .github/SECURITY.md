@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-The following versions of the Nissan Hardbody RFID project are currently being supported with security updates:
+The following versions of the Chelonian Access project are currently being supported with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -11,7 +11,7 @@ The following versions of the Nissan Hardbody RFID project are currently being s
 
 ## Reporting a Vulnerability
 
-The Nissan Hardbody RFID project takes security seriously. We appreciate your efforts to responsibly disclose your findings.
+The Chelonian Access project takes security seriously. We appreciate your efforts to responsibly disclose your findings.
 
 ### How to Report
 

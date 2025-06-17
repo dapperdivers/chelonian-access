@@ -3,11 +3,11 @@ title: Project Overview
 nav_order: 2
 ---
 
-# Nissan Hardbody RFID System - Complete Project Overview
+# Chelonian Access System - Complete Project Overview
 
 ## Project Summary
 
-This is a modernized implementation of an RFID access control system for a Nissan Hardbody truck, built on the ESP32-C3 SuperMini platform. The system provides secure keyless entry with audio feedback, expandable relay control, and wireless connectivity capabilities.
+Chelonian Access is a modern, security-focused RFID access control system built on the ESP32-C3 SuperMini platform. The system provides secure keyless entry with audio feedback, expandable relay control, and wireless connectivity capabilities.
 
 ## Documentation Index
 

@@ -1,4 +1,4 @@
-# Clang-tidy configuration for Nissan Hardbody RFID Project
+# Clang-tidy configuration for Chelonian Access Project
 Checks: >
   -*,
   bugprone-*,

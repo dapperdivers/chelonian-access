@@ -4,7 +4,7 @@ nav_order: 5
 has_children: true
 ---
 
-# New Feature Ideas for Nissan Hardbody RFID System
+# New Feature Ideas for Chelonian Access
 
 This directory contains detailed feature proposals for enhancing the RFID access control system. Each feature has its own document with implementation checklists.
 

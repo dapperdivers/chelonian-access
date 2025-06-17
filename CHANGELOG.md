@@ -1,13 +1,16 @@
 # Changelog
 
-All notable changes to the Nissan Hardbody RFID Access Control System will be documented in this file.
+All notable changes to Chelonian Access will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
 ### Added
+
 - GitHub Actions workflow for automated testing
 - GitHub Actions workflow for release builds with checksums
 - Comprehensive unit test suite for all components
@@ -41,6 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic RFID reading functionality
 - Simple relay control
 
-[Unreleased]: https://github.com/dapperdivers/simple-sexy/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/dapperdivers/simple-sexy/compare/v0.1.0...v1.0.0
-[0.1.0]: https://github.com/dapperdivers/simple-sexy/releases/tag/v0.1.0
+[Unreleased]: https://github.com/dapperdivers/chelonian-access/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/dapperdivers/chelonian-access/compare/v0.1.0...v1.0.0
+[0.1.0]: https://github.com/dapperdivers/chelonian-access/releases/tag/v0.1.0

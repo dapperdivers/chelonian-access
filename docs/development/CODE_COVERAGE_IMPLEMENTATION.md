@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the implementation of a comprehensive code coverage solution for the Nissan Hardbody RFID project. The solution provides both online and offline coverage reporting capabilities through:
+This document outlines the implementation of a comprehensive code coverage solution for the Chelonian Access project. The solution provides both online and offline coverage reporting capabilities through:
 
 1. **Codecov Integration** - For online visualization, PR comments, and badges
 2. **Local HTML Reports** - As downloadable artifacts for offline viewing
@@ -192,10 +192,8 @@ ignore:
 Add the Codecov badge to your README.md (near the top, after the title):
 
 ```markdown
-[![codecov](https://codecov.io/gh/YOUR_USERNAME/nissan-hardbody-rfid/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/nissan-hardbody-rfid)
+[![codecov](https://codecov.io/gh/dapperdivers/chelonian-access/branch/main/graph/badge.svg)](https://codecov.io/gh/dapperdivers/chelonian-access)
 ```
-
-Replace `YOUR_USERNAME` with your GitHub username.
 
 ## Features
 
@@ -225,7 +223,7 @@ Replace `YOUR_USERNAME` with your GitHub username.
 
 ### Codecov Reports (Online)
 1. Click on the Codecov badge in README
-2. Or visit `codecov.io/gh/[username]/nissan-hardbody-rfid`
+2. Or visit `codecov.io/gh/dapperdivers/chelonian-access`
 3. Explore file-by-file coverage
 4. View coverage trends and graphs
 

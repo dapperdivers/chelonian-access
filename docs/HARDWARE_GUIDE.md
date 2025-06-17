@@ -5,13 +5,16 @@ nav_order: 3
 
 # Hardware Components Guide
 
-This document provides detailed information about each hardware component used in the Nissan Hardbody RFID system, including current usage and potential capabilities.
+- Simple Sexy PCB created by **Chimpo** [Forum](https://forum.dangerousthings.com/t/completed-personalized-electronic-nfc-ignition-system)
+
+This document provides detailed information about each hardware component used in the Chelonian Access system, including current usage and potential capabilities.
 
 ## Core Components
 
 ### 1. ESP32-C3 SuperMini
 
 **Specifications:**
+
 - Microcontroller: ESP32-C3 (RISC-V)
 - Operating Voltage: 3.3V (with 5V input via USB-C)
 - Clock Speed: 160MHz
@@ -26,6 +29,7 @@ This document provides detailed information about each hardware component used i
 - Size: Ultra-compact 22.52 x 18mm
 
 **Current Usage:**
+
 - Pin 10: RFID SS (Slave Select)
 - Pin 9: Relay 1 (Door unlock)
 - Pin 6: Relay 2
@@ -36,6 +40,7 @@ This document provides detailed information about each hardware component used i
 - MISO/MOSI/SCK: SPI for RFID
 
 **Available Features Not Yet Used:**
+
 - Pin 8 (Blue LED) - Status indication
 - WiFi capabilities for remote access
 - Bluetooth LE for mobile app integration
@@ -46,6 +51,7 @@ This document provides detailed information about each hardware component used i
 - Touch sensor capabilities
 
 **Future Potential:**
+
 - Over-the-air (OTA) updates
 - Web server for configuration
 - MQTT integration
@@ -55,6 +61,7 @@ This document provides detailed information about each hardware component used i
 ### 2. PN532 NFC/RFID Module
 
 **Specifications:**
+
 - Operating Voltage: 3.3V-5V
 - Communication: SPI, I2C, or HSU (High Speed UART)
 - Supported Cards: Mifare 1K, 4K, Ultralight, DesFire, and more
@@ -63,11 +70,13 @@ This document provides detailed information about each hardware component used i
 - Current Consumption: ~150mA peak, ~50mA average
 
 **Current Usage:**
+
 - SPI communication mode
 - Reading Mifare Classic 4-byte and 7-byte UIDs
 - Basic card presence detection
 
 **Available Features Not Yet Used:**
+
 - Card emulation mode
 - Peer-to-peer communication
 - Writing data to cards
@@ -77,6 +86,7 @@ This document provides detailed information about each hardware component used i
 - Low power card detection mode
 
 **Future Potential:**
+
 - Store access levels on the card itself
 - Use card memory for logging
 - Implement rolling codes for enhanced security
@@ -86,6 +96,7 @@ This document provides detailed information about each hardware component used i
 ### 3. JQ6500 MP3 Player Module
 
 **Specifications:**
+
 - Operating Voltage: 3.2V-5V
 - Communication: UART (9600 baud default)
 - Supported formats: MP3, WAV
@@ -95,6 +106,7 @@ This document provides detailed information about each hardware component used i
 - Current Consumption: ~20mA idle, ~200mA when driving speaker
 
 **Current Usage:**
+
 - Playing 6 audio tracks:
   1. Power-up sound
   2. "Are you still there" (10s timeout)
@@ -106,6 +118,7 @@ This document provides detailed information about each hardware component used i
 - Volume control via software
 
 **Available Features Not Yet Used:**
+
 - Busy pin for playback status
 - Button control interface
 - Folder-based organization
@@ -114,6 +127,7 @@ This document provides detailed information about each hardware component used i
 - EQ settings
 
 **Future Potential:**
+
 - Voice announcements for card holders
 - Multi-language support
 - Background music/ambience
@@ -124,11 +138,12 @@ This document provides detailed information about each hardware component used i
 ### 4. Relay Module - SRD-05VDC-SL-C (4-Channel)
 
 **Specifications:**
+
 - Model: SRD-05VDC-SL-C
 - Channels: 4 independent relays
 - Type: Active LOW (LOW signal = relay ON)
 - Operating Voltage: 5V relay coil, 3.3V-5V logic compatible
-- Relay Ratings: 
+- Relay Ratings:
   - 10A @ 250VAC
   - 10A @ 125VAC
   - 10A @ 30VDC
@@ -138,10 +153,12 @@ This document provides detailed information about each hardware component used i
 - Contact Form: SPDT (NO/NC/COM)
 
 **Current Usage:**
+
 - Relay 1: Door lock/unlock (10-second activation)
 - Relay 2-4: Currently unused
 
 **Available Features Not Yet Used:**
+
 - Relay 2: Could control lights
 - Relay 3: Could control alarm/siren
 - Relay 4: Could control auxiliary systems
@@ -149,6 +166,7 @@ This document provides detailed information about each hardware component used i
 - Status LED on each relay
 
 **Future Potential:**
+
 - Interior light control
 - Engine start/stop
 - Alarm system integration
@@ -159,6 +177,7 @@ This document provides detailed information about each hardware component used i
 ### 5. Power Supply - Mini360 Buck Converter
 
 **Specifications:**
+
 - Model: Mini360 DC-DC Buck Converter
 - Input Voltage: 4.75V-23V
 - Output Voltage: 1V-17V (adjustable)
@@ -169,11 +188,13 @@ This document provides detailed information about each hardware component used i
 - Protection: Over-current, thermal shutdown
 
 **Current Usage:**
+
 - Converting 12V automotive power to stable 5V
 - Powering all system components
 - Set to 5V output for relay module and component compatibility
 
 **Features:**
+
 - Adjustable output via trim pot
 - High efficiency reduces heat
 - Wide input range handles automotive voltage fluctuations
@@ -181,14 +202,16 @@ This document provides detailed information about each hardware component used i
 
 ## Power Considerations
 
-### Current Consumption Breakdown:
+### Current Consumption Breakdown
+
 - ESP32-C3: ~100mA (active WiFi), ~20mA (idle), 43μA (deep sleep)
 - PN532: ~50mA (average), 150mA (peak)
 - JQ6500: ~20mA (idle), 200mA (playing with speaker)
 - Relays: ~80mA per active relay
 - **Total**: ~90mA idle, ~350-450mA active
 
-### Power Optimization Opportunities:
+### Power Optimization Opportunities
+
 1. ESP32-C3 deep sleep: 43μA
 2. PN532 power down: ~10μA
 3. JQ6500 standby mode
@@ -197,27 +220,31 @@ This document provides detailed information about each hardware component used i
 
 ## Expansion Possibilities
 
-### I2C Bus (Pins 8/9 can be configured):
+### I2C Bus (Pins 8/9 can be configured)
+
 - RTC module (DS3231) for time-based access
 - OLED display for status
 - Additional EEPROM storage
 - Temperature/humidity sensors
 - Accelerometer for tamper detection
 
-### Remaining Digital Pins:
+### Remaining Digital Pins
+
 - Emergency button input
 - Status LEDs (beyond built-in)
 - Buzzer for local alerts
 - PIR motion sensor
 - Door position sensor
 
-### Analog Inputs Available (A0-A5):
+### Analog Inputs Available (A0-A5)
+
 - Battery voltage monitoring
 - Light sensor for automatic brightness
 - Current sensing for each relay
 - Potentiometer for volume control
 
-### Wireless Capabilities:
+### Wireless Capabilities
+
 - WiFi configuration portal
 - Mobile app via BLE
 - MQTT for home automation
@@ -226,7 +253,7 @@ This document provides detailed information about each hardware component used i
 
 ## Wiring Diagram
 
-```
+```txt
 ESP32-C3 SuperMini
 ┌─────────────────┐
 │                 │
@@ -268,7 +295,8 @@ Mini360 Buck Converter
 
 ## Advantages of New Hardware
 
-### ESP32-C3 SuperMini vs Pro Micro:
+### ESP32-C3 SuperMini vs Pro Micro
+
 - **Processing Power**: 160MHz RISC-V vs 8MHz AVR
 - **Memory**: 400KB RAM vs 2.5KB RAM
 - **Storage**: 4MB Flash vs 32KB Flash
@@ -276,13 +304,15 @@ Mini360 Buck Converter
 - **Size**: Similar compact form factor
 - **Power**: More efficient deep sleep modes
 
-### JQ6500 vs DFPlayer:
+### JQ6500 vs DFPlayer
+
 - **Simplicity**: Easier serial protocol
 - **Reliability**: More stable operation
 - **Integration**: Better documentation
 - **Cost**: Similar price point
 
-### Mini360 Buck Converter:
+### Mini360 Buck Converter
+
 - **Efficiency**: Up to 96% vs linear regulators
 - **Adjustable**: Fine-tune output voltage
 - **Compact**: Minimal board space

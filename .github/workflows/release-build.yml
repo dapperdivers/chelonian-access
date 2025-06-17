@@ -34,11 +34,11 @@ jobs:
     - name: Copy and rename artifacts
       run: |
         mkdir -p release-artifacts
-        cp .pio/build/promicro/firmware.elf release-artifacts/nissan-hardbody-rfid-${{ steps.get_version.outputs.VERSION }}.elf
-        cp .pio/build/promicro/firmware.hex release-artifacts/nissan-hardbody-rfid-${{ steps.get_version.outputs.VERSION }}.hex
+        cp .pio/build/promicro/firmware.elf release-artifacts/chelonian-access-${{ steps.get_version.outputs.VERSION }}.elf
+        cp .pio/build/promicro/firmware.hex release-artifacts/chelonian-access-${{ steps.get_version.outputs.VERSION }}.hex
         # Check if .bin file exists (some platforms may not generate it)
         if [ -f ".pio/build/promicro/firmware.bin" ]; then
-          cp .pio/build/promicro/firmware.bin release-artifacts/nissan-hardbody-rfid-${{ steps.get_version.outputs.VERSION }}.bin
+          cp .pio/build/promicro/firmware.bin release-artifacts/chelonian-access-${{ steps.get_version.outputs.VERSION }}.bin
         fi
     
     - name: Generate checksums
@@ -63,13 +63,13 @@ jobs:
           if [ ! -s "release-artifacts/RELEASE_NOTES.md" ]; then
             echo "## Release ${{ steps.get_version.outputs.VERSION }}" > release-artifacts/RELEASE_NOTES.md
             echo "" >> release-artifacts/RELEASE_NOTES.md
-            echo "Firmware release for Nissan Hardbody RFID Access Control System" >> release-artifacts/RELEASE_NOTES.md
+            echo "Firmware release for Chelonian Access Access Control System" >> release-artifacts/RELEASE_NOTES.md
           fi
         else
           # Create a simple changelog entry
           echo "## Release ${{ steps.get_version.outputs.VERSION }}" > release-artifacts/RELEASE_NOTES.md
           echo "" >> release-artifacts/RELEASE_NOTES.md
-          echo "Firmware release for Nissan Hardbody RFID Access Control System" >> release-artifacts/RELEASE_NOTES.md
+          echo "Firmware release for Chelonian Access Access Control System" >> release-artifacts/RELEASE_NOTES.md
           echo "" >> release-artifacts/RELEASE_NOTES.md
           echo "### Installation" >> release-artifacts/RELEASE_NOTES.md
           echo "1. Download the appropriate firmware file (.hex for most programmers)" >> release-artifacts/RELEASE_NOTES.md

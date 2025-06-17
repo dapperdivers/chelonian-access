@@ -1,11 +1,11 @@
-# 🚗 Nissan Hardbody RFID Access Control System
+# 🐢 Chelonian Access - Modern RFID Entry System
 
-[![PlatformIO CI](https://github.com/dapperdivers/simple-sexy/workflows/PlatformIO%20CI/badge.svg)](https://github.com/dapperdivers/simple-sexy/actions)
-[![codecov](https://codecov.io/gh/dapperdivers/simple-sexy/branch/main/graph/badge.svg)](https://codecov.io/gh/dapperdivers/simple-sexy)
+[![PlatformIO CI](https://github.com/dapperdivers/chelonian-access/workflows/PlatformIO%20CI/badge.svg)](https://github.com/dapperdivers/chelonian-access/actions)
+[![codecov](https://codecov.io/gh/dapperdivers/chelonian-access/branch/main/graph/badge.svg)](https://codecov.io/gh/dapperdivers/chelonian-access)
 
-![Simple Sexy AC System](Simple%20Sexy%20AC%20V2.png)
+![Chelonian Access System](Simple%20Sexy%20AC%20V2.png)
 
-A modern, modular RFID keyless entry system for the Nissan Hardbody truck, built on the ESP32-C3 SuperMini platform. This project takes the original SimpleSexyAC concept and transforms it into a robust, testable, and expandable access control system.
+A modern, secure RFID access control system, now known as Chelonian Access (formerly Simple Sexy AC), built on the ESP32-C3 SuperMini platform. This project takes the original SimpleSexyAC concept and transforms it into a robust, testable, and expandable access control system.
 
 ## ✨ Current Features
 
@@ -80,8 +80,8 @@ A modern, modular RFID keyless entry system for the Nissan Hardbody truck, built
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/dapperdivers/simple-sexy.git
-   cd nissan-hardbody-rfid
+   git clone https://github.com/dapperdivers/chelonian-access.git
+   cd chelonian-access
    ```
 
 2. Build the project:
@@ -148,7 +148,7 @@ All enhancements are documented with implementation guides, hardware requirement
 ## 🏗️ Project Structure
 
 ```txt
-nissan-hardbody-rfid/
+chelonian-access/
 ├── docs/                    # Comprehensive documentation
 │   ├── features/           # Enhancement implementation guides
 │   ├── PROJECT_OVERVIEW.md # System architecture
@@ -245,8 +245,8 @@ MIT License - See [LICENSE](.github/LICENSE.md) for details
 
 ## 🙏 Acknowledgments
 
-- Hardware created by **Chimpo**
-- Original software: [SIMPLE-SEXY](https://github.com/chiplocks/SIMPLE-SEXY)
+- Simple Sexy PCB created by **Chimpo**
+- Original Software: [SIMPLE-SEXY](https://github.com/chiplocks/SIMPLE-SEXY)
 - RFID implants: [Dangerous Things](https://dangerousthings.com/)
 
 ---

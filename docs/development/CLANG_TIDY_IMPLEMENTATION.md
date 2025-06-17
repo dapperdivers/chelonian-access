@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides the implementation details for integrating clang-tidy static analysis into the Nissan Hardbody RFID project CI/CD pipeline.
+This document provides the implementation details for integrating clang-tidy static analysis into the Chelonian Access project CI/CD pipeline.
 
 ## Implementation Steps
 
@@ -11,7 +11,7 @@ This document provides the implementation details for integrating clang-tidy sta
 Create a `.clang-tidy` file in the project root with the following content:
 
 ```yaml
-# Clang-tidy configuration for Nissan Hardbody RFID Project
+# Clang-tidy configuration for Chelonian Access Project
 Checks: >
   -*,
   bugprone-*,

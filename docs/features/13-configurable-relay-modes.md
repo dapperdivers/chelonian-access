@@ -1,7 +1,7 @@
 # Feature: Configurable Relay Modes
 
-**Complexity**: 🟢 Low  
-**Hardware Required**: ✅ None  
+**Complexity**: 🟢 Low
+**Hardware Required**: ✅ None
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -46,20 +46,20 @@ Allow configuration of relay behavior including normally open (NO), normally clo
       // Basic settings
       bool activeHigh;        // true = HIGH activates, false = LOW
       bool defaultState;      // true = normally on, false = normally off
-      
+
       // Timing settings
       uint32_t activeDuration;  // ms (0 = latching)
       uint32_t pulseOnTime;     // ms for pulse mode
       uint32_t pulseOffTime;    // ms for pulse mode
       uint8_t pulseCount;       // number of pulses
-      
+
       // Advanced settings
       enum FailMode {
           FAIL_SAFE,      // Activate on power loss
-          FAIL_SECURE,    // Deactivate on power loss  
+          FAIL_SECURE,    // Deactivate on power loss
           FAIL_LAST       // Maintain state
       } failMode;
-      
+
       enum ActivationMode {
           MODE_MOMENTARY,  // Active for duration
           MODE_LATCHING,   // Stay active
@@ -77,7 +77,7 @@ Allow configuration of relay behavior including normally open (NO), normally clo
       RelayConfig configs[NUM_RELAYS];
       uint32_t activationTime[NUM_RELAYS];
       bool toggleState[NUM_RELAYS];
-      
+
   public:
       void setRelayConfig(uint8_t relay, const RelayConfig& config);
       RelayConfig getRelayConfig(uint8_t relay);
@@ -99,7 +99,7 @@ Allow configuration of relay behavior including normally open (NO), normally clo
       .failMode = FAIL_SAFE,
       .mode = MODE_MOMENTARY
   };
-  
+
   // Door Lock (Fail-Secure)
   RelayConfig doorLockFailSecure = {
       .activeHigh = false,
@@ -108,7 +108,7 @@ Allow configuration of relay behavior including normally open (NO), normally clo
       .failMode = FAIL_SECURE,
       .mode = MODE_MOMENTARY
   };
-  
+
   // Alarm Siren
   RelayConfig alarmSiren = {
       .activeHigh = true,
@@ -118,7 +118,7 @@ Allow configuration of relay behavior including normally open (NO), normally clo
       .pulseCount = 10,
       .mode = MODE_PULSED
   };
-  
+
   // Light Control
   RelayConfig lightControl = {
       .activeHigh = true,
@@ -137,7 +137,7 @@ Allow configuration of relay behavior including normally open (NO), normally clo
   RELAY_STATUS
   SAVE_RELAY_CONFIG
   ```
-  
+
 - [ ] Example commands:
   ```
   RELAY_CONFIG 1 ACTIVE_HIGH true
@@ -150,19 +150,19 @@ Allow configuration of relay behavior including normally open (NO), normally clo
 - [ ] Save configurations:
   ```cpp
   #define RELAY_CONFIG_ADDR 100  // EEPROM address
-  
+
   void saveRelayConfigs() {
       for (int i = 0; i < NUM_RELAYS; i++) {
           int addr = RELAY_CONFIG_ADDR + (i * sizeof(RelayConfig));
           EEPROM.put(addr, configs[i]);
       }
   }
-  
+
   void loadRelayConfigs() {
       for (int i = 0; i < NUM_RELAYS; i++) {
           int addr = RELAY_CONFIG_ADDR + (i * sizeof(RelayConfig));
           EEPROM.get(addr, configs[i]);
-          
+
           // Validate loaded config
           if (configs[i].activeDuration > 3600000) {  // > 1 hour
               loadDefaultConfig(i);  // Load safe default

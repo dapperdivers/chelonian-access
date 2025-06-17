@@ -3,11 +3,11 @@
 #include <array>
 
 #ifdef UNIT_TEST
-    #include "mock_arduino.h"
-    #include "mock_pn532.h"  // Mock PN532 for unit testing
+#include "mock_arduino.h"
+#include "mock_pn532.h"  // Mock PN532 for unit testing
 #else
-    #include <Arduino.h>
-    #include <Adafruit_PN532.h>
+#include <Adafruit_PN532.h>
+#include <Arduino.h>
 #endif
 
 class RFIDController {
@@ -28,7 +28,7 @@ private:
     static constexpr uint8_t MAX_7B_UIDS = 2;
     uint8_t m_ss_pin;
     AdafruitPN532* m_nfc;  // Using SPI interface
-    
+
     std::array<std::array<uint8_t, 4>, MAX_4B_UIDS> m_uids4B{};
     std::array<std::array<uint8_t, 7>, MAX_7B_UIDS> m_uids7B{};
     uint8_t m_num4BUIDs{0};

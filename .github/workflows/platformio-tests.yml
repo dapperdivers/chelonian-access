@@ -1,5 +1,7 @@
 name: PlatformIO CI
-
+permissions:
+  contents: read
+  pull-requests: write
 on:
   push:
     branches: [ main ]
@@ -9,17 +11,17 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0  # Shallow clones can save time
-    
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.x'
-    
+
     - name: Cache PlatformIO
       uses: actions/cache@v3
       with:
@@ -29,18 +31,18 @@ jobs:
         key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
         restore-keys: |
           ${{ runner.os }}-pio-
-    
+
     - name: Install and cache apt packages
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
         packages: lcov
         version: 1.0
-    
+
     - name: Install PlatformIO
       run: |
         python -m pip install --upgrade pip
         pip install platformio
-    
+
     - name: Run tests with coverage
       run: |
         pio test -e native
@@ -48,11 +50,11 @@ jobs:
         lcov --capture --directory .pio/build/native/ --output-file coverage.info
         lcov --remove coverage.info '/usr/*' '*/test/*' '*/lib/mocks/*' '*/.pio/*' --output-file coverage.info --ignore-errors unused
         lcov --list coverage.info
-    
+
     - name: Generate HTML coverage report
       run: |
         genhtml coverage.info --output-directory coverage-report
-        
+
     - name: Upload coverage HTML report
       uses: actions/upload-artifact@v4
       with:
@@ -62,8 +64,8 @@ jobs:
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}       
-    
+        token: ${{ secrets.CODECOV_TOKEN }}
+
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: failure()
@@ -75,15 +77,15 @@ jobs:
 
   static-analysis:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.x'
-    
+
     - name: Cache PlatformIO
       uses: actions/cache@v3
       with:
@@ -93,10 +95,10 @@ jobs:
         key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
         restore-keys: |
           ${{ runner.os }}-pio-
-    
+
     - name: Install Rust toolchain
       uses: dtolnay/rust-toolchain@stable
-    
+
     - name: Cache Rust dependencies
       uses: actions/cache@v3
       with:
@@ -108,7 +110,7 @@ jobs:
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
         restore-keys: |
           ${{ runner.os }}-cargo-
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -119,19 +121,19 @@ jobs:
         # Install clang-tidy-sarif for SARIF conversion (only if not cached)
         which clang-tidy-sarif || cargo install clang-tidy-sarif
         which sarif-fmt || cargo install sarif-fmt
-    
+
     - name: Generate compile_commands.json
       run: |
         # Generate compilation database for native environment
         pio run -t compiledb -e native
         # The file is already generated in the project root by PlatformIO
         ls -la compile_commands.json
-    
+
     - name: Run clang-tidy
       run: |
         # Create results directory
         mkdir -p clang-tidy-results
-        
+
         # Run clang-tidy on all source files and convert to SARIF
         find src include -name "*.cpp" -o -name "*.h" | \
         xargs clang-tidy -p . 2>&1 | \
@@ -139,22 +141,22 @@ jobs:
         clang-tidy-sarif | \
         tee clang-tidy-results/results.sarif | \
         sarif-fmt
-        
+
         # Also export fixes for potential auto-fixing
         find src include -name "*.cpp" -o -name "*.h" | \
         xargs clang-tidy -p . --export-fixes=clang-tidy-results/fixes.yaml 2>&1 > /dev/null || true
-        
+
         # Check if there were any warnings
         if grep -q "warning:" clang-tidy-results/output.txt; then
           echo "::warning::Clang-tidy found issues. See artifacts for details."
         fi
-    
+
     - name: Generate HTML report
       if: always()
       run: |
         # Ensure directory exists
         mkdir -p clang-tidy-results
-        
+
         # Create a simple HTML report
         cat > clang-tidy-results/report.html << 'EOF'
         <!DOCTYPE html>
@@ -172,15 +174,15 @@ jobs:
           <h1>Clang-tidy Analysis Report</h1>
           <pre>
         EOF
-        
+
         cat clang-tidy-results/output.txt >> clang-tidy-results/report.html
-        
+
         cat >> clang-tidy-results/report.html << 'EOF'
           </pre>
         </body>
         </html>
         EOF
-    
+
     - name: Upload clang-tidy results
       uses: actions/upload-artifact@v4
       if: always()
@@ -188,7 +190,7 @@ jobs:
         name: clang-tidy-results
         path: clang-tidy-results/
         retention-days: 30
-    
+
     - name: Upload SARIF to GitHub Security
       uses: github/codeql-action/upload-sarif@v3
       if: always() && github.event_name == 'push'

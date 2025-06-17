@@ -1,7 +1,7 @@
 # Feature: Remote Management
 
-**Complexity**: 🟡 Medium  
-**Hardware Required**: ✅ None (ESP32-C3 has built-in WiFi/Bluetooth)  
+**Complexity**: 🟡 Medium
+**Hardware Required**: ✅ None (ESP32-C3 has built-in WiFi/Bluetooth)
 **User Value**: ⭐⭐⭐ Essential
 
 ## Overview
@@ -203,7 +203,7 @@ Leverage the ESP32-C3 SuperMini's built-in WiFi (802.11 b/g/n) and Bluetooth 5.0
   void setupMQTT() {
       mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
       mqttClient.setCallback(mqttCallback);
-      
+
       // Topics
       String baseTopic = "rfid/" + deviceId + "/";
       mqttClient.subscribe((baseTopic + "command").c_str());

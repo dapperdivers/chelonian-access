@@ -1,7 +1,7 @@
 # Feature: Mobile App Integration
 
-**Complexity**: 🔴 High  
-**Hardware Required**: 🔧 Minor (Bluetooth LE module)  
+**Complexity**: 🔴 High
+**Hardware Required**: 🔧 Minor (Bluetooth LE module)
 **User Value**: ⭐⭐ Nice-to-have
 
 ## Overview
@@ -88,7 +88,7 @@ Integrate smartphone connectivity to use mobile devices as virtual RFID cards, e
   - [ ] Unlock button
   - [ ] Access history
   - [ ] Settings management
-  
+
 - [ ] **Advanced Features**:
   - [ ] Geofencing auto-unlock
   - [ ] Share temporary access
@@ -105,7 +105,7 @@ Integrate smartphone connectivity to use mobile devices as virtual RFID cards, e
       // 3. Verify signature
       // 4. Create session key
       // 5. All further comm encrypted
-      
+
       return verifySignature(challenge, signature, publicKey);
   }
   ```

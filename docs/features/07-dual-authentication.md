@@ -1,7 +1,7 @@
 # Feature: Dual Authentication
 
-**Complexity**: 🟡 Medium  
-**Hardware Required**: 🔧 Minor (Keypad or second RFID reader)  
+**Complexity**: 🟡 Medium
+**Hardware Required**: 🔧 Minor (Keypad or second RFID reader)
 **User Value**: ⭐⭐ Nice-to-have
 
 ## Overview
@@ -126,7 +126,7 @@ Implement two-factor authentication requiring two different credentials for high
   - [ ] Prevent same person with two cards
   - [ ] Minimum time between factors
   - [ ] Location-based validation (two readers apart)
-  
+
 - [ ] **Buddy System**:
   - [ ] Designated card pairs
   - [ ] Supervisor + employee combinations
@@ -143,7 +143,7 @@ Implement two-factor authentication requiring two different credentials for high
   - [ ] PIN complexity rules
   - [ ] Expiration and rotation
   - [ ] Duress PIN (silent alarm)
-  
+
 - [ ] **Storage**:
   ```cpp
   // Secure PIN storage
@@ -189,7 +189,7 @@ byte colPins[COLS] = {6, 7, 8, 9};
 ## Use Cases
 
 1. **Server Room**: IT admin card + personal PIN
-2. **Safe Access**: Manager + assistant cards simultaneously  
+2. **Safe Access**: Manager + assistant cards simultaneously
 3. **Chemical Storage**: Safety officer card + daily rotating PIN
 4. **Night Access**: Security guard card + supervisor approval
 5. **Clean Room**: Badge + biometric verification

@@ -1,0 +1,105 @@
+[tasks]
+verify-basic-tools = """
+command -v git >/dev/null 2>&1 || { echo "git is not installed"; exit 1; }
+command -v curl >/dev/null 2>&1 || { echo "curl is not installed"; exit 1; }
+command -v g++ >/dev/null 2>&1 || { echo "g++ is not installed"; exit 1; }
+command -v make >/dev/null 2>&1 || { echo "make is not installed"; exit 1; }
+command -v python3 >/dev/null 2>&1 || { echo "python3 is not installed"; exit 1; }
+echo "✓ All basic tools are installed"
+"""
+
+install-basic-tools = """
+if ! mise run verify-basic-tools >/dev/null 2>&1; then
+    echo "Installing basic development tools..."
+    sudo apt-get update && sudo apt-get install -y build-essential git curl python3 python3-pip
+fi
+"""
+
+install-deps = """
+# Install system dependencies
+for tool in clang-format clang-tidy cppcheck uncrustify; do
+    if ! command -v $tool >/dev/null 2>&1; then
+        echo "Installing $tool..."
+        sudo apt-get update && sudo apt-get install -y $tool
+    else
+        echo "✓ $tool is already installed"
+    fi
+done
+
+# Install PlatformIO
+if ! command -v pio >/dev/null 2>&1; then
+    echo "Installing PlatformIO..."
+    python3 -m pip install --user platformio
+    export PATH="$PATH:$HOME/.local/bin"
+else
+    echo "✓ PlatformIO is already installed"
+fi
+"""
+
+install-oclint = """
+if ! command -v oclint >/dev/null 2>&1; then
+    echo "Installing oclint..."
+    wget https://github.com/oclint/oclint/releases/download/v24.11/oclint-24.11-llvm-16.0.4-x86_64-linux-ubuntu-24.04.tar.gz && \
+    tar -xf oclint-24.11-llvm-16.0.4-x86_64-linux-ubuntu-24.04.tar.gz && \
+    sudo cp -r oclint-24.11/lib/* /usr/local/lib/ && \
+    sudo cp -r oclint-24.11/bin/* /usr/local/bin/ && \
+    rm -rf oclint-24.11*
+else
+    echo "✓ oclint is already installed"
+fi
+"""
+
+verify-dev-tools = """
+echo "Verifying development tools..."
+command -v clang-format >/dev/null 2>&1 && echo "✓ clang-format $(clang-format --version)" || echo "✗ clang-format missing"
+command -v clang-tidy >/dev/null 2>&1 && echo "✓ clang-tidy $(clang-tidy --version)" || echo "✗ clang-tidy missing"
+command -v cppcheck >/dev/null 2>&1 && echo "✓ cppcheck $(cppcheck --version)" || echo "✗ cppcheck missing"
+command -v uncrustify >/dev/null 2>&1 && echo "✓ uncrustify $(uncrustify --version)" || echo "✗ uncrustify missing"
+command -v oclint >/dev/null 2>&1 && echo "✓ oclint $(oclint --version)" || echo "✗ oclint missing"
+command -v pre-commit >/dev/null 2>&1 && echo "✓ pre-commit $(pre-commit --version)" || echo "✗ pre-commit missing"
+command -v pio >/dev/null 2>&1 && echo "✓ PlatformIO $(pio --version)" || echo "✗ PlatformIO missing"
+"""
+
+verify-pio = """
+echo "Verifying PlatformIO installation..."
+if command -v pio >/dev/null 2>&1; then
+    pio system info
+    echo "✓ PlatformIO is properly installed"
+else
+    echo "✗ PlatformIO is not installed"
+    exit 1
+fi
+"""
+
+repair-pio = """
+echo "Repairing PlatformIO installation..."
+python3 -m pip uninstall -y platformio
+python3 -m pip install --user platformio
+export PATH="$PATH:$HOME/.local/bin"
+pio system prune -f
+pio update
+echo "✓ PlatformIO has been repaired and updated"
+"""
+
+setup = """
+mise run install-basic-tools && \
+mise run install-deps && \
+mise run install-oclint && \
+mise run verify-dev-tools && \
+mise run verify-pio
+"""
+
+build = "pio run"
+test = "pio test"
+
+[tasks.lint]
+description = "Run all linters"
+run = "pre-commit run --all-files"
+
+[env]
+SHELL = "zsh"
+
+[tools]
+pre-commit = "latest"
+clang-format = "17.0.6"
+python = "3.11"

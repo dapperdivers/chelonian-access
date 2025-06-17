@@ -1,11 +1,18 @@
-# 🚗 Nissan Hardbody RFID Access Control System
+# 🐢 Chelonian Access - Modern RFID Entry System
 
-[![PlatformIO CI](https://github.com/dapperdivers/simple-sexy/workflows/PlatformIO%20CI/badge.svg)](https://github.com/dapperdivers/simple-sexy/actions)
-[![codecov](https://codecov.io/gh/dapperdivers/simple-sexy/branch/main/graph/badge.svg)](https://codecov.io/gh/dapperdivers/simple-sexy)
+[![PlatformIO CI](https://github.com/dapperdivers/chelonian-access/workflows/PlatformIO%20CI/badge.svg)](https://github.com/dapperdivers/chelonian-access/actions)
+[![codecov](https://codecov.io/gh/dapperdivers/chelonian-access/branch/main/graph/badge.svg)](https://codecov.io/gh/dapperdivers/chelonian-access)
 
-![Simple Sexy AC System](Simple%20Sexy%20AC%20V2.png)
+![Chelonian Access System](Simple%20Sexy%20AC%20V2.png)
 
-A modern, modular RFID keyless entry system for the Nissan Hardbody truck, built on the ESP32-C3 SuperMini platform. This project takes the original SimpleSexyAC concept and transforms it into a robust, testable, and expandable access control system.
+A modern, secure RFID access control system, now known as Chelonian Access (formerly Simple Sexy AC), built on the ESP32-C3 SuperMini platform. This project takes the original SimpleSexyAC concept and transforms it into a robust, testable, and expandable access control system.
+
+## 🚀 Getting Started
+
+- [Development Environment Setup Guide](docs/guides/DEVELOPMENT_SETUP.md) - Complete guide to setting up your development environment
+- [Hardware Setup Guide](docs/HARDWARE_GUIDE.md) - Instructions for assembling and connecting hardware
+- [Project Overview](docs/PROJECT_OVERVIEW.md) - Architecture and design overview
+- [Current Features](docs/CURRENT_FEATURES.md) - Detailed feature documentation
 
 ## ✨ Current Features
 
@@ -56,7 +63,7 @@ A modern, modular RFID keyless entry system for the Nissan Hardbody truck, built
 ### Core Documentation
 
 - **[Project Overview](docs/PROJECT_OVERVIEW.md)** - Complete system architecture and capabilities
-- **[Hardware Guide](docs/HARDWARE_GUIDE.md)** - Detailed component specifications  
+- **[Hardware Guide](docs/HARDWARE_GUIDE.md)** - Detailed component specifications
 - **[Current Features](docs/CURRENT_FEATURES.md)** - Implemented vs. possible features
 
 ### Enhancement Guides
@@ -80,8 +87,8 @@ A modern, modular RFID keyless entry system for the Nissan Hardbody truck, built
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/dapperdivers/simple-sexy.git
-   cd nissan-hardbody-rfid
+   git clone https://github.com/dapperdivers/chelonian-access.git
+   cd chelonian-access
    ```
 
 2. Build the project:
@@ -140,7 +147,7 @@ These enhancements require no additional hardware and can significantly improve 
 The [Feature Roadmap](docs/features/feature-roadmap.md) contains detailed guides for many more potential enhancements, including:
 
 - **Wireless Features** - WiFi portal, BLE integration, OTA updates, MQTT support
-- **Enhanced Security** - Multiple access levels, logging, time-based access, emergency override  
+- **Enhanced Security** - Multiple access levels, logging, time-based access, emergency override
 - **Advanced Features** - Battery backup, dual authentication, scheduled relay control
 
 All enhancements are documented with implementation guides, hardware requirements, and code examples.
@@ -148,7 +155,7 @@ All enhancements are documented with implementation guides, hardware requirement
 ## 🏗️ Project Structure
 
 ```txt
-nissan-hardbody-rfid/
+chelonian-access/
 ├── docs/                    # Comprehensive documentation
 │   ├── features/           # Enhancement implementation guides
 │   ├── PROJECT_OVERVIEW.md # System architecture
@@ -245,8 +252,8 @@ MIT License - See [LICENSE](.github/LICENSE.md) for details
 
 ## 🙏 Acknowledgments
 
-- Hardware created by **Chimpo**
-- Original software: [SIMPLE-SEXY](https://github.com/chiplocks/SIMPLE-SEXY)
+- Simple Sexy PCB created by **Chimpo**
+- Original Software: [SIMPLE-SEXY](https://github.com/chiplocks/SIMPLE-SEXY)
 - RFID implants: [Dangerous Things](https://dangerousthings.com/)
 
 ---

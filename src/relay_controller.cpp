@@ -1,7 +1,7 @@
 #include "relay_controller.h"
 
-RelayController::RelayController(uint8_t relay1_pin, uint8_t relay2_pin, 
-                                uint8_t relay3_pin, uint8_t relay4_pin) {
+RelayController::RelayController(uint8_t relay1_pin, uint8_t relay2_pin, uint8_t relay3_pin,
+                                 uint8_t relay4_pin) {
     m_relays[0] = {relay1_pin, false};
     m_relays[1] = {relay2_pin, false};
     m_relays[2] = {relay3_pin, false};
@@ -11,7 +11,7 @@ RelayController::RelayController(uint8_t relay1_pin, uint8_t relay2_pin,
 void RelayController::begin() {
     for (uint8_t i = 0; i < NUM_RELAYS; i++) {
         pinMode(m_relays[i].pin, OUTPUT);
-        setRelay(i, false); // Initialize all relays to OFF state
+        setRelay(i, false);  // Initialize all relays to OFF state
     }
 }
 

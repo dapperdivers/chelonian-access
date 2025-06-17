@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-We pledge to make participation in the Nissan Hardbody RFID project a welcoming and respectful experience for everyone. We are committed to providing a friendly, safe, and professional environment for all contributors, regardless of their background or level of experience.
+We pledge to make participation in the Chelonian Access project a welcoming and respectful experience for everyone. We are committed to providing a friendly, safe, and professional environment for all contributors, regardless of their background or level of experience.
 
 ## Our Standards
 
@@ -56,7 +56,7 @@ Instances of unacceptable behavior may be reported by contacting the project tea
 
 ## Attribution
 
-This Code of Conduct is adapted from various open source community standards and tailored for the Nissan Hardbody RFID project community.
+This Code of Conduct is adapted from various open source community standards and tailored for the Chelonian Access project community.
 
 ---
 

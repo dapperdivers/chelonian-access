@@ -215,6 +215,7 @@ Add the Codecov badge to your README.md (near the top, after the title):
 ## Accessing Coverage Reports
 
 ### HTML Reports (Offline)
+
 1. Navigate to the Actions tab in GitHub
 2. Click on the specific workflow run
 3. Scroll to the "Artifacts" section
@@ -222,6 +223,7 @@ Add the Codecov badge to your README.md (near the top, after the title):
 5. Extract the ZIP and open `index.html` in a browser
 
 ### Codecov Reports (Online)
+
 1. Click on the Codecov badge in README
 2. Or visit `codecov.io/gh/dapperdivers/chelonian-access`
 3. Explore file-by-file coverage
@@ -230,6 +232,7 @@ Add the Codecov badge to your README.md (near the top, after the title):
 ## Coverage Filtering
 
 The following paths are excluded from coverage reports:
+
 - System files (`/usr/*`)
 - Test files (`*/test/*`)
 - Mock files (`*/lib/mocks/*`)

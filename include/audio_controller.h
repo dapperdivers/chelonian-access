@@ -7,8 +7,8 @@
 #endif
 #else
 #include <Arduino.h>
+#include <SoftwareSerial.h>  // For SoftwareSerial on ESP32-C3
 #ifdef USINGMP3
-#include <HardwareSerial.h>
 #include <JQ6500_Serial.h>
 #endif
 #endif
@@ -19,7 +19,7 @@
 #define MP3_STATUS_PAUSED 2
 
 // JQ6500 Source constants
-#define MP3_SRC_BUILTIN 0
+#define MP3_SRC_BUILTIN 4
 #define MP3_SRC_SDCARD 1
 
 class AudioPlayer {
@@ -49,6 +49,7 @@ public:
     static constexpr uint8_t SOUND_DENIED_3 = 6;
 
 private:
+    SoftwareSerial* audioSerial = nullptr;
     bool m_initialized{false};
     uint8_t m_current_volume{20};
     uint8_t m_rx_pin;
@@ -57,12 +58,9 @@ private:
         MP3_SRC_BUILTIN};  // Track source internally since JQ6500 doesn't provide getSource
 
 #ifdef USINGMP3
-    // Mock state for unit testing
+    // State for MP3 player
 public:
     bool audio_enabled{false};
-    HardwareSerial* serial;
     JQ6500_Serial* player{nullptr};
-
-private:  // Keep private in production
 #endif
 };

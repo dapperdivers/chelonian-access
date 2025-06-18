@@ -37,7 +37,7 @@ constexpr uint32_t RELAY1_DURATION = 1000;  // 1 second
 constexpr uint32_t RELAY2_DURATION = 1000;  // 1 second
 ```
 
-### 3. Audio Player Tests (`test_audio_player.cpp`)
+### 3. Audio Player Tests (`test_audio_controller.cpp`)
 **No critical changes required** - existing tests should work with the updated implementation.
 
 ### 4. RFID Controller Tests (`test_rfid_controller.cpp`)

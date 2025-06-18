@@ -1,10 +1,8 @@
 ---
-title: Home
+title: Chelonian Access - Modern RFID Entry System
 layout: home
 nav_order: 1
 ---
-
-# Chelonian Access - Modern RFID Entry System
 
 {: .fs-9 }
 
@@ -24,6 +22,7 @@ A modern, modular RFID keyless entry system built on the ESP32-C3 SuperMini plat
 - [Current Features](CURRENT_FEATURES.html) - Implemented vs. possible features
 - [Feature Roadmap](features/feature-roadmap.html) - Comprehensive enhancement guide
 - [Development Setup](guides/DEVELOPMENT_SETUP.html) - Detailed Guide to local development
+- [Software Installation](guides/software/01_ESP32_FIRMWARE_INSTALLATION.html) - ESP32 firmware and audio file installation guides
 
 ### About the Project
 

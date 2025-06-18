@@ -164,12 +164,12 @@ chelonian-access/
 ├── include/                # Header files
 │   ├── rfid_controller.h
 │   ├── relay_controller.h
-│   └── audio_player.h
+│   └── audio_controller.h
 ├── src/                    # Implementation files
 │   ├── main.cpp
 │   ├── rfid_controller.cpp
 │   ├── relay_controller.cpp
-│   └── audio_player.cpp
+│   └── audio_controller.cpp
 ├── lib/                    # Mock libraries for testing
 │   └── mocks/
 ├── test/                   # Comprehensive unit tests

@@ -7,7 +7,7 @@ std::array<PinStateChange, MAX_PIN_HISTORY> mockPinHistory{};
 uint8_t mockHistoryIndex = 0;
 millis_t mockMillis = 0;
 millis_t mock_delay_time = 0;
-HardwareSerial serial;
+SoftwareSerial audioSerial(0, 1);
 
 // Forward declarations
 void recordPinStateChange(uint8_t pin, uint8_t state);
@@ -96,3 +96,11 @@ void recordPinStateChange(uint8_t pin, uint8_t state) {
         mockHistoryIndex++;
     }
 }
+
+// Minimal main() for native test build
+#ifdef UNIT_TEST
+int main() {
+    // You can call test entry points here if needed
+    return 0;
+}
+#endif

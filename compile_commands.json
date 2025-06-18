@@ -1,15 +1,21 @@
 [
     {
-        "command": "/usr/bin/g++ -o .pio/build/native/libfda/mocks/mock_arduino.o -c --coverage -ftest-coverage -DPLATFORMIO=60118 -DUNIT_TEST -DUSINGMP3 -Iinclude -Ilib/mocks -Ilib/test lib/mocks/mock_arduino.cpp",
+        "command": "/usr/bin/g++ -o .pio/build/native/libc35/mocks/mock_arduino.o -c --coverage -ftest-coverage -DPLATFORMIO=60118 -DUNIT_TEST -DUSINGMP3 -Iinclude -Ilib/mocks -Ilib/test lib/mocks/mock_arduino.cpp",
         "directory": "/home/derek/projects/chelonian-access",
         "file": "lib/mocks/mock_arduino.cpp",
-        "output": ".pio/build/native/libfda/mocks/mock_arduino.o"
+        "output": ".pio/build/native/libc35/mocks/mock_arduino.o"
     },
     {
-        "command": "/usr/bin/g++ -o .pio/build/native/src/audio_player.o -c --coverage -ftest-coverage -DPLATFORMIO=60118 -DUNIT_TEST -DUSINGMP3 -Isrc -Iinclude -Ilib/mocks -Ilib/test src/audio_player.cpp",
+        "command": "/usr/bin/g++ -o .pio/build/native/src/access_service.o -c --coverage -ftest-coverage -DPLATFORMIO=60118 -DUNIT_TEST -DUSINGMP3 -Isrc -Iinclude -Ilib/mocks -Ilib/test src/access_service.cpp",
         "directory": "/home/derek/projects/chelonian-access",
-        "file": "src/audio_player.cpp",
-        "output": ".pio/build/native/src/audio_player.o"
+        "file": "src/access_service.cpp",
+        "output": ".pio/build/native/src/access_service.o"
+    },
+    {
+        "command": "/usr/bin/g++ -o .pio/build/native/src/audio_controller.o -c --coverage -ftest-coverage -DPLATFORMIO=60118 -DUNIT_TEST -DUSINGMP3 -Isrc -Iinclude -Ilib/mocks -Ilib/test src/audio_controller.cpp",
+        "directory": "/home/derek/projects/chelonian-access",
+        "file": "src/audio_controller.cpp",
+        "output": ".pio/build/native/src/audio_controller.o"
     },
     {
         "command": "/usr/bin/g++ -o .pio/build/native/src/main.o -c --coverage -ftest-coverage -DPLATFORMIO=60118 -DUNIT_TEST -DUSINGMP3 -Isrc -Iinclude -Ilib/mocks -Ilib/test src/main.cpp",

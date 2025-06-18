@@ -112,8 +112,52 @@ private:
     int8_t m_tx_pin = -1;
 };
 
+// Mock SoftwareSerial for audio on ESP32-C3
+class SoftwareSerial {
+public:
+    SoftwareSerial(int8_t rxPin, int8_t txPin)
+        : m_rx(rxPin), m_tx(txPin), m_baud(0), m_begun(false) {}
+    void begin(unsigned long baud) {
+        m_baud = baud;
+        m_begun = true;
+    }
+    void end() {
+        m_begun = false;
+    }
+    int available() {
+        return 0;
+    }
+    int read() {
+        return -1;
+    }
+    size_t write(uint8_t b) {
+        // Optionally track written bytes for test
+        return 1;
+    }
+    void flush() {}
+    bool isBegun() const {
+        return m_begun;
+    }
+    unsigned long getBaud() const {
+        return m_baud;
+    }
+    int8_t getRx() const {
+        return m_rx;
+    }
+    int8_t getTx() const {
+        return m_tx;
+    }
+
+private:
+    int8_t m_rx;
+    int8_t m_tx;
+    unsigned long m_baud;
+    bool m_begun;
+};
+
 // Global Serial object
 extern HardwareSerial Serial;
+extern SoftwareSerial audioSerial;  // For ESP32-C3, using SoftwareSerial for audio
 
 // Mock state tracking
 extern std::array<uint8_t, MAX_PINS> mockPinModes;

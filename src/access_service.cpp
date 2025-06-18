@@ -1,65 +1,51 @@
-#ifndef UNIT_TEST
-
-#include <Arduino.h>
 #include "access_service.h"
-#include "audio_controller.h"
-#include "relay_controller.h"
-#include "rfid_controller.h"
 
+#ifdef UNIT_TEST
+#include "mock_arduino.h"
+#else
+#include <Arduino.h>
+#endif
 // Instantiate controllers
 RFIDController rfid;
 RelayController relays;
 AudioPlayer audio;
 
 // State variables
+enum RelayState currentRelayState = RELAY_IDLE;
 uint8_t invalidAttempts = 0;
 bool scanned = false;
 bool impatient = false;
 unsigned long relayActivatedTime = 0;
 bool relayActive = false;
 
-void setup() {
+const uint8_t invalidDelays[MAXIMUM_INVALID_ATTEMPTS] = {1,  3,  4,  5,  8,  12, 17,
+                                                         23, 30, 38, 47, 57, 68};
+
+void accessServiceSetup() {
     Serial.begin(115200);
-
-    // ESP32-C3 might need additional time for USB CDC to initialize
     delay(2000);
-
     Serial.println(F("Starting up!"));
-
-    // Initialize controllers
     if (!rfid.begin()) {
         Serial.print(F("Didn't find PN53x board"));
         while (1)
-            ;  // halt
+            ;
     }
-
-    // Print firmware version like the original
     rfid.printFirmwareVersion();
-
-    // Initialize with default UIDs
     rfid.initializeDefaultUIDs();
-
     relays.begin();
-    relays.setAllRelays(false);  // All relays off initially
-
+    relays.setAllRelays(false);
     if (audio.begin()) {
-        audio.setVolume(20);  // Adjusted to match manufacturer's default
+        audio.setVolume(20);
         delay(500);
         audio.playTrack(AudioPlayer::SOUND_STARTUP);
     }
-
     Serial.println(F("Waiting for an ISO14443A card"));
-
-    accessServiceSetup();
 }
 
 void handleRelaySequence() {
-    // ESP32-C3 sequential relay activation as per manufacturer
     switch (currentRelayState) {
         case RELAY_IDLE:
-            // Nothing to do
             break;
-
         case RELAY1_ACTIVE:
             if (millis() - relayActivatedTime >= RELAY1_DURATION) {
                 relays.setRelay(RELAY1_PIN, false);
@@ -69,7 +55,6 @@ void handleRelaySequence() {
                 Serial.println(F("Relay 1 OFF, Relay 2 ON"));
             }
             break;
-
         case RELAY2_ACTIVE:
             if (millis() - relayActivatedTime >= RELAY2_DURATION) {
                 relays.setRelay(RELAY2_PIN, false);
@@ -82,7 +67,6 @@ void handleRelaySequence() {
 }
 
 void activateRelays() {
-    // ESP32-C3 sequential activation
     relays.setRelay(RELAY1_PIN, true);
     relayActivatedTime = millis();
     currentRelayState = RELAY1_ACTIVE;
@@ -90,23 +74,16 @@ void activateRelays() {
     Serial.println(F("Starting relay sequence - Relay 1 ON"));
 }
 
-void loop() {
+void accessServiceLoop() {
     boolean success;
-    uint8_t uid[] = {0, 0, 0, 0, 0, 0, 0};  // Buffer to store the returned UID
-    uint8_t uidLength;  // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
-
-    // Handle relay timing
+    uint8_t uid[] = {0, 0, 0, 0, 0, 0, 0};
+    uint8_t uidLength;
     handleRelaySequence();
-
-    // Check if we should play the waiting sound
     if (millis() > 10000 && !impatient && !scanned) {
         audio.playTrack(AudioPlayer::SOUND_WAITING);
         impatient = true;
     }
-
-    // Try to read a card
     success = rfid.readCard(uid, &uidLength);
-
     if (success) {
         scanned = true;
         Serial.println(F("Found a card!"));
@@ -119,9 +96,7 @@ void loop() {
             Serial.print(uid[i], HEX);
         }
         Serial.println("");
-
         bool validUID = rfid.validateUID(uid, uidLength);
-
         if (uidLength == 4) {
             Serial.println("4B UID");
         } else if (uidLength == 7) {
@@ -129,15 +104,11 @@ void loop() {
         } else {
             Serial.print(F("Unknown UID type / length"));
         }
-
-        if (validUID) {  // IF CORRECT UID DO THIS.
+        if (validUID) {
             Serial.print(F("Card match found!"));
-            invalidAttempts = 0;  // RESETS THE DOUBLE DOWN DELAY
+            invalidAttempts = 0;
             audio.playTrack(AudioPlayer::SOUND_ACCEPTED);
-
-            // Activate relays based on platform
             activateRelays();
-
         } else {
             Serial.print(F("Unauthorised card"));
             if (invalidAttempts == 0) {
@@ -149,16 +120,9 @@ void loop() {
             }
             delay(3000);
             delay(invalidDelays[invalidAttempts] * 1000);
-            if (invalidAttempts <
-                MAXIMUM_INVALID_ATTEMPTS - 1)  // THIS DOUBLES THE DELAYTIME BETWEEN EACH WRONG UID
-                                               // SCAN,(BRUTEFORCE DETERRANT)
-            {
+            if (invalidAttempts < MAXIMUM_INVALID_ATTEMPTS - 1) {
                 invalidAttempts++;
             }
         }
     }
-
-    accessServiceLoop();
 }
-
-#endif

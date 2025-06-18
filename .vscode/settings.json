@@ -6,6 +6,7 @@
         "${workspaceFolder}/test/mocks"
     ],
     "files.associations": {
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "array": "cpp"
     }
 }

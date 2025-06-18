@@ -28,14 +28,14 @@ Here's what the completed assembly looks like:
 3. [Main Connections](03_MAIN_CONNECTIONS.md) - Connect power and ground between components
 4. [RFID Reader Installation](04_RFID_INSTALLATION.md) - Install and configure the RFID reader
 5. [Relay Module Setup](05_RELAY_SETUP.md) - Set up the relay control system
-6. [Audio System Installation](06_AUDIO_INSTALLATION.md) - Install the audio feedback system
-7. [Final Assembly](07_FINAL_ASSEMBLY.md) - Complete the system assembly and testing
+6. [Final Assembly](06_FINAL_ASSEMBLY.md) - Complete the system assembly and testing
 
 Follow each guide in sequence for the best results. Each subguide contains detailed instructions, testing procedures, and troubleshooting tips.
 
 ## Prerequisites
 
 ### Required Components
+
 - ESP32-C3 SuperMini
 - PN532 NFC/RFID Module
 - 4-Channel Relay Module (SRD-05VDC-SL-C)
@@ -49,6 +49,7 @@ Follow each guide in sequence for the best results. Each subguide contains detai
 - Strain relief for cables
 
 ### Required Tools
+
 - Soldering iron and solder
 - Wire strippers
 - Small screwdriver set
@@ -59,6 +60,7 @@ Follow each guide in sequence for the best results. Each subguide contains detai
 ## Getting Started
 
 Follow the assembly guides in order, starting with the power supply setup. Each guide contains:
+
 - Required components for that section
 - Step-by-step instructions
 - Testing procedures

@@ -1,7 +1,7 @@
 ---
 title: Final Assembly
 parent: Hardware Guides
-nav_order: 8
+nav_order: 7
 ---
 
 # Final Assembly
@@ -25,6 +25,7 @@ Here's what your assembly should look like at various stages:
 *Final assembly - back view*
 
 ## Required Components
+
 - Project enclosure
 - Mounting hardware
 - Cable ties
@@ -81,21 +82,14 @@ Here's what your assembly should look like at various stages:
    - Test all features
 
 ### Best Practices
-- Label everything
+
 - Use proper mounting hardware
 - Add ventilation if needed
 - Document modifications
 - Take photos of assembly
 
 ### Final Checklist
+
 1. All connections secure
 2. Proper strain relief
 3. All openings sealed
-4. Labels in place
-5. Documentation complete
-
-### Next Steps
-- Software installation
-- System configuration
-- Access control setup
-- Maintenance schedule

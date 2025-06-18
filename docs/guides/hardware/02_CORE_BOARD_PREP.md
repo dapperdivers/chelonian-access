@@ -20,6 +20,7 @@ This guide covers the preparation and initial setup of the main control boards f
 *8-Pin Connector (Female Side)*
 
 ## Required Components
+
 - ESP32-C3 SuperMini
 - PN532 NFC/RFID Module
 - Soldering iron and solder
@@ -41,42 +42,44 @@ This guide covers the preparation and initial setup of the main control boards f
    - Solder all pins completely
    - Clean any excess flux
 
-3. **Pin Marking:**
-   - Mark pin numbers for easy reference
-   - Document any special pin functions
-   - Consider adding a pin reference label
-
 ### 2. PN532 Module Preparation
 
 1. **Module Configuration:**
+   - ![PN532 NFC/RFID Module Jumpers](../assets/img/assembly/pn532-spi-jumpers.jpeg) *PN532 NFC/RFID Module Jumpers*
    - Set jumpers for SPI mode operation
    - Verify the module is set to 3.3V operation
-   - Install headers if needed
 
 2. **Initial Testing:**
    - Check all solder joints
    - Verify jumper positions
-   - Document module settings
 
 ### 3. Simple Sexy PCB Setup
 
 1. **Relay Connections:**
    - Solder individual wires to relay pins
-   - Follow the specified color scheme
-   - Use heat shrink tubing on connections
+   - **Brown** - Relay 1 control
+   - **Orange** - Relay 2 control
+   - **Yellow** - Relay 3 control
+   - **Green** - Relay 4 control
+   - Verify all connections are secure
 
 2. **8-Pin Connector:**
    - Solder female connector to board
-   - Follow the color scheme exactly
+   - **Brown** - SPI MISO (PN532)
+   - **Orange** - SPI MOSI (PN532)
+   - **Green** - SPI SCK (PN532)
+   - **Yellow** - SPI SS/CS (PN532)
    - Verify all connections are secure
 
 ### Best Practices
+
 - Use proper soldering temperature
 - Clean all surfaces before soldering
 - Allow joints to cool naturally
 - Test continuity after soldering
 
 ### Testing
+
 1. Check all solder joints visually
 2. Test continuity of connections
 3. Verify correct jumper positions

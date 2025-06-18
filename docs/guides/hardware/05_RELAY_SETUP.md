@@ -17,11 +17,11 @@ This guide covers the installation and configuration of the 4-Channel Relay Modu
 *Relay Module Wiring Connections*
 
 ## Required Components
+
 - 4-Channel Relay Module (SRD-05VDC-SL-C)
 - Jumper wires
 - Heat shrink tubing
 - Wire strippers
-- Screwdriver set
 
 ## Installation Steps
 
@@ -32,12 +32,6 @@ This guide covers the installation and configuration of the 4-Channel Relay Modu
    - Verify relay specifications
    - Identify control pins
    - Note COM/NO/NC terminals
-
-2. **Power Setup:**
-   - Connect VCC to 5V supply
-   - Connect GND to common ground
-   - Verify power LED illuminates
-   - Check relay response
 
 ### 2. Control Wiring
 
@@ -54,13 +48,14 @@ This guide covers the installation and configuration of the 4-Channel Relay Modu
    - Add strain relief
 
 ### Best Practices
+
 - Keep high voltage separated
 - Use proper wire gauge
 - Add strain relief
-- Label all connections
 - Test before final mount
 
 ### Testing
+
 1. Verify control signals
 2. Test each relay channel
 3. Check for proper switching
@@ -68,6 +63,7 @@ This guide covers the installation and configuration of the 4-Channel Relay Modu
 5. Measure contact resistance
 
 ### Troubleshooting
+
 - Check power supply voltage
 - Verify control signals
 - Test relay manually

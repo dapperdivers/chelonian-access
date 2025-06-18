@@ -10,20 +10,16 @@ This guide covers the installation and setup of the PN532 NFC/RFID module in the
 
 ## Component Images
 
-![PN532 SPI Jumpers](../assets/img/assembly/pn532-spi-jumpers.jpeg)
-*PN532 Module SPI Jumper Configuration*
-
 ![PN532 Connections](../assets/img/assembly/pn532 wired connections.jpeg)
 *PN532 Module Wiring*
 
 ![PN532 Front View](../assets/img/assembly/pn352 wired front.jpeg)
-*PN532 Module Mounted - Front View*
+*PN532 Module - Front View*
 
 ## Required Components
+
 - PN532 NFC/RFID Module
-- Shielded cable (recommended)
-- Mounting hardware
-- Heat shrink tubing
+- Shielded cable
 
 ## Installation Steps
 
@@ -35,39 +31,34 @@ This guide covers the installation and setup of the PN532 NFC/RFID module in the
    - Consider reader accessibility
    - Plan for cable routing
 
-2. **Mounting Preparation:**
-   - Mark mounting points
-   - Prepare mounting surface
-   - Consider waterproofing needs
-   - Plan cable entry points
-
 ### 2. Wiring Installation
 
 1. **SPI Connections:**
    - Keep SPI wires as short as possible
    - Use shielded cable if available
-   - Follow proper wire routing
-   - Label all connections
-
-2. **Power Connections:**
-   - Connect to 3.3V supply
-   - Verify proper grounding
-   - Use appropriate wire gauge
-   - Add strain relief
+   - **Red** - SPI VCC (PN532)
+   - **Black** - SPI GND (PN532)
+   - **Brown** - SPI MISO (PN532)
+   - **Orange** - SPI MOSI (PN532)
+   - **Green** - SPI SCK (PN532)
+   - **Yellow** - SPI SS/CS (PN532)
 
 ### Best Practices
+
 - Keep antenna away from metal
 - Use shielded cables for SPI
 - Maintain proper spacing
 - Test before final mounting
 
 ### Testing
+
 1. Verify power connections
 2. Test read range
 3. Check for interference
 4. Validate card detection
 
 ### Troubleshooting
+
 - Check cable shielding
 - Verify power supply
 - Test in different positions

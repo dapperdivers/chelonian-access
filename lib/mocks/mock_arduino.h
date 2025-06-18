@@ -113,7 +113,7 @@ private:
 };
 
 // Global Serial object
-extern HardwareSerial serial;
+extern HardwareSerial Serial;
 
 // Mock state tracking
 extern std::array<uint8_t, MAX_PINS> mockPinModes;

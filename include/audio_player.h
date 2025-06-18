@@ -61,7 +61,7 @@ private:
 public:
     bool audio_enabled{false};
     HardwareSerial* serial;
-    JQ6500Serial* player{nullptr};
+    JQ6500_Serial* player{nullptr};
 
 private:  // Keep private in production
 #endif

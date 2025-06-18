@@ -20,7 +20,7 @@ bool AudioPlayer::begin() {
     delay(500);
 
     // Create JQ6500 instance with our serial connection
-    player = new JQ6500Serial(audioSerial);
+    player = new JQ6500_Serial(audioSerial);
 
     reset();  // Reset JQ6500 on startup
     delay(500);

@@ -5,7 +5,7 @@
 #define PN532_MIFARE_ISO14443A (0x00)
 
 // Mock PN532 class
-class AdafruitPN532 {
+class Adafruit_PN532 {
 private:
     uint8_t m_ss_pin;
     uint32_t m_firmwareVersion{0x0153};
@@ -17,7 +17,7 @@ private:
     bool m_hasCard{false};
 
 public:
-    AdafruitPN532(uint8_t ss) : m_ss_pin(ss) {}
+    Adafruit_PN532(uint8_t ss) : m_ss_pin(ss) {}
 
     void begin() {
         m_initialized = true;
@@ -27,7 +27,7 @@ public:
         return m_initialized ? m_firmwareVersion : 0;
     }
 
-    void samConfig() {
+    void SAMConfig() {
         // Mock implementation - does nothing
     }
 

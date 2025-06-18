@@ -17,9 +17,9 @@
 #endif
 
 // Mock JQ6500_Serial class for unit testing
-class JQ6500Serial {
+class JQ6500_Serial {
 public:
-    JQ6500Serial(HardwareSerial& serial) : m_serial(serial) {}
+    JQ6500_Serial(HardwareSerial& serial) : m_serial(serial) {}
 
     void reset() {
         // Mock reset functionality

@@ -22,9 +22,6 @@ const uint8_t invalidDelays[MAXIMUM_INVALID_ATTEMPTS] = {1,  3,  4,  5,  8,  12,
                                                          23, 30, 38, 47, 57, 68};
 
 void accessServiceSetup() {
-    Serial.begin(115200);
-    delay(2000);
-    Serial.println(F("Starting up!"));
     if (!rfid.begin()) {
         Serial.print(F("Didn't find PN53x board"));
         while (1)

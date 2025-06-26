@@ -96,11 +96,3 @@ void recordPinStateChange(uint8_t pin, uint8_t state) {
         mockHistoryIndex++;
     }
 }
-
-// Minimal main() for native test build
-#ifdef UNIT_TEST
-int main() {
-    // You can call test entry points here if needed
-    return 0;
-}
-#endif

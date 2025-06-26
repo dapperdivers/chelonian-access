@@ -16,5 +16,4 @@ void loop() {
     // Call the main service loop
     accessServiceLoop();
 }
-
 #endif

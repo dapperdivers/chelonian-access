@@ -1,7 +1,11 @@
 #include "relay_controller.h"
+#include "IRelayController.h"
 
-RelayController::RelayController(uint8_t relay1_pin, uint8_t relay2_pin, uint8_t relay3_pin,
-                                 uint8_t relay4_pin) {
+// Constructor implementation
+RelayController::RelayController(pinMode_t pinMode_func, digitalWrite_t digitalWrite_func,
+                                 uint8_t relay1_pin, uint8_t relay2_pin, uint8_t relay3_pin,
+                                 uint8_t relay4_pin)
+    : m_pinMode(pinMode_func), m_digitalWrite(digitalWrite_func) {
     m_relays[0] = {relay1_pin, false};
     m_relays[1] = {relay2_pin, false};
     m_relays[2] = {relay3_pin, false};
@@ -10,7 +14,7 @@ RelayController::RelayController(uint8_t relay1_pin, uint8_t relay2_pin, uint8_t
 
 void RelayController::begin() {
     for (uint8_t i = 0; i < NUM_RELAYS; i++) {
-        pinMode(m_relays[i].pin, OUTPUT);
+        m_pinMode(m_relays[i].pin, OUTPUT);
         setRelay(i, false);  // Initialize all relays to OFF state
     }
 }
@@ -19,7 +23,7 @@ void RelayController::setRelay(uint8_t relay, bool state) {
     if (isValidRelay(relay)) {
         m_relays[relay].state = state;
         // Active LOW relay logic
-        digitalWrite(m_relays[relay].pin, static_cast<uint8_t>(!state));
+        m_digitalWrite(m_relays[relay].pin, static_cast<uint8_t>(!state));
     }
 }
 

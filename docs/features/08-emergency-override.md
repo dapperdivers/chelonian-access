@@ -34,7 +34,7 @@ Implement emergency override mechanisms for situations where normal access metho
       uint8_t buttonPin;
       uint8_t glassBreakPin;
       bool overrideActive;
-      unsigned long overrideTime;
+      millis_t overrideTime;
   public:
       void begin();
       bool checkOverride();

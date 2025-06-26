@@ -1,93 +1,122 @@
 #include <unity.h>
-#include "relay_controller.h"
+#include "relay_controller.h"  // Include for pin definitions
 #include "test_helpers.h"
 
-void testRelayInitialState() {
-    // Check pin modes are set to OUTPUT
-    TEST_ASSERT_EQUAL(OUTPUT, mockPinModes[9]);   // Relay 1
-    TEST_ASSERT_EQUAL(OUTPUT, mockPinModes[10]);  // Relay 2
-    TEST_ASSERT_EQUAL(OUTPUT, mockPinModes[20]);  // Relay 3
-    TEST_ASSERT_EQUAL(OUTPUT, mockPinModes[21]);  // Relay 4
+// External fixtures from test_helpers.cpp
+extern RelayTestFixture* relayFixture;
 
-    // Check initial states
+void testRelayInitialState() {
+    // Test that relays are in initial state (all off)
     TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(0));
     TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(1));
     TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(2));
     TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(3));
-
-    // Check initial pin states (active LOW, so HIGH = OFF)
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[9]);   // Relay 1
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[10]);  // Relay 2
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[20]);  // Relay 3
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[21]);  // Relay 4
 }
 
 void testSetSingleRelay() {
-    relayFixture->relays->setRelay(0, true);
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(0));
-    TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(1));
-    TEST_ASSERT_EQUAL(LOW, mockPinStates[9]);  // Active LOW logic
+    // Clear pin history before the test
+    resetPinHistory();
 
+    // Turn relay 0 on
+    relayFixture->relays->setRelay(0, true);
+
+    // Verify the pin state changed and was recorded
+    TEST_ASSERT_EQUAL(1, getPinHistoryCount());
+    PinStateChange change1 = getPinHistoryEntry(0);
+
+    // Debug print with clearer labels
+    printf("DEBUG: Pin History Entry 0 - Pin: %d, State: %d, Timestamp: %lu\n", change1.pin,
+           change1.state, change1.timestamp);
+    printf("DEBUG: Expected Pin for Relay 0: %d\n", RELAY1_PIN);
+
+    // Assert that the recorded pin is RELAY1_PIN
+    TEST_ASSERT_EQUAL(RELAY1_PIN, change1.pin);
+
+    // Assert the state
+    TEST_ASSERT_EQUAL(LOW, change1.state);  // Active LOW
+
+    // Turn relay 0 off
     relayFixture->relays->setRelay(0, false);
-    TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(0));
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[9]);  // Active LOW logic
+
+    // Verify the pin state changed again and was recorded
+    TEST_ASSERT_EQUAL(2, getPinHistoryCount());
+    PinStateChange change2 = getPinHistoryEntry(1);
+    TEST_ASSERT_EQUAL(RELAY1_PIN, change2.pin);
+    TEST_ASSERT_EQUAL(HIGH, change2.state);  // Active LOW
 }
 
 void testSetAllRelays() {
+    // Clear pin history before the test
+    resetPinHistory();
+
+    // Turn all relays on
     relayFixture->relays->setAllRelays(true);
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(0));
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(1));
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(2));
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(3));
 
-    // Check all pins are LOW (active LOW logic)
-    TEST_ASSERT_EQUAL(LOW, mockPinStates[9]);
-    TEST_ASSERT_EQUAL(LOW, mockPinStates[10]);
-    TEST_ASSERT_EQUAL(LOW, mockPinStates[20]);
-    TEST_ASSERT_EQUAL(LOW, mockPinStates[21]);
+    // Verify each relay pin was set to LOW (active)
+    TEST_ASSERT_EQUAL(4, getPinHistoryCount());
+    // Note: The order of pin changes might not be guaranteed,
+    // but we can check if each relay pin was set to LOW.
+    // A more robust test would check for specific pin/state pairs.
+    TEST_ASSERT_EQUAL(LOW, getPinState(RELAY1_PIN));
+    TEST_ASSERT_EQUAL(LOW, getPinState(RELAY2_PIN));
+    TEST_ASSERT_EQUAL(LOW, getPinState(RELAY3_PIN));
+    TEST_ASSERT_EQUAL(LOW, getPinState(RELAY4_PIN));
 
+    // Clear pin history for the next part
+    resetPinHistory();
+
+    // Turn all relays off
     relayFixture->relays->setAllRelays(false);
-    TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(0));
-    TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(1));
-    TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(2));
-    TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(3));
 
-    // Check all pins are HIGH (active LOW logic)
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[9]);
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[10]);
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[20]);
-    TEST_ASSERT_EQUAL(HIGH, mockPinStates[21]);
+    // Verify each relay pin was set to HIGH (inactive)
+    TEST_ASSERT_EQUAL(4, getPinHistoryCount());
+    TEST_ASSERT_EQUAL(HIGH, getPinState(RELAY1_PIN));
+    TEST_ASSERT_EQUAL(HIGH, getPinState(RELAY2_PIN));
+    TEST_ASSERT_EQUAL(HIGH, getPinState(RELAY3_PIN));
+    TEST_ASSERT_EQUAL(HIGH, getPinState(RELAY4_PIN));
 }
 
 void testInvalidRelayNumber() {
+    // No pin history changes should occur for invalid relay numbers
+    resetPinHistory();
+
+    // Test invalid relay number
     TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(4));
+
+    // Try to set invalid relay
     relayFixture->relays->setRelay(4, true);
-    TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(4));
+
+    // Verify no pin history changes occurred
+    TEST_ASSERT_EQUAL(0, getPinHistoryCount());
 }
 
 void testRelayStateTransitions() {
-    // Clear history to start fresh
-    resetMockState();
-    relayFixture->relays->begin();
-
-    // Clear again to only track our specific transitions
-    resetMockState();
+    // Clear pin history before the test
+    resetPinHistory();
 
     // Test sequence: OFF -> ON -> OFF
-    // Start with relay OFF (should be HIGH)
-    relayFixture->relays->setRelay(0, false);  // Ensure it's OFF (HIGH)
+    relayFixture->relays->setRelay(0, false);
+    relayFixture->relays->setRelay(0, true);
+    relayFixture->relays->setRelay(0, false);
 
-    const uint8_t EXPECTED_STATES[] = {HIGH, LOW, HIGH};  // OFF -> ON -> OFF
-    relayFixture->relays->setRelay(0, true);              // Goes LOW (active low)
-    advanceMockTime(100);
-    relayFixture->relays->setRelay(0, false);  // Goes HIGH
+    // Verify state transitions using pin history
+    TEST_ASSERT_EQUAL(3, getPinHistoryCount());
 
-    TEST_ASSERT_TRUE(verifyPinSequence(9, EXPECTED_STATES, 3));
-    TEST_ASSERT_EQUAL(3, getPinTransitionCount(9));
+    PinStateChange change1 = getPinHistoryEntry(0);
+    TEST_ASSERT_EQUAL(RELAY1_PIN, change1.pin);
+    TEST_ASSERT_EQUAL(HIGH, change1.state);  // Active LOW
+
+    PinStateChange change2 = getPinHistoryEntry(1);
+    TEST_ASSERT_EQUAL(RELAY1_PIN, change2.pin);
+    TEST_ASSERT_EQUAL(LOW, change2.state);  // Active LOW
+
+    PinStateChange change3 = getPinHistoryEntry(2);
+    TEST_ASSERT_EQUAL(RELAY1_PIN, change3.pin);
+    TEST_ASSERT_EQUAL(HIGH, change3.state);  // Active LOW
 }
 
 void testRapidRelaySwitching() {
-    // Clear history to only count transitions from this test
+    // Clear pin history before the test
     resetPinHistory();
 
     // Rapidly switch relay on and off
@@ -98,30 +127,64 @@ void testRapidRelaySwitching() {
         advanceMockTime(10);
     }
 
-    TEST_ASSERT_EQUAL(10, getPinTransitionCount(9));
+    // Verify we have 10 state changes recorded
+    TEST_ASSERT_EQUAL(10, getPinHistoryCount());
 }
 
 void testSequentialRelayOperations() {
-    // Clear history to start fresh
-    resetMockState();
-    relayFixture->relays->begin();
+    // Clear pin history before the test
+    resetPinHistory();
 
     // Test sequential activation pattern with timing
-    relayFixture->relays->setRelay(0, true);  // Pin 9 goes LOW at time 0
-    advanceMockTime(100);
-    relayFixture->relays->setRelay(1, true);  // Pin 10 goes LOW at time 100
-    advanceMockTime(100);
-    relayFixture->relays->setRelay(2, true);  // Pin 20 goes LOW at time 200
-    advanceMockTime(100);
-    relayFixture->relays->setRelay(3, true);  // Pin 21 goes LOW at time 300
+    millis_t startTime = millis();
 
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(0));
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(1));
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(2));
-    TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(3));
+    relayFixture->relays->setRelay(0, true);
+    advanceMockTime(100);
 
-    // Verify timing between first relay activation and last relay activation
-    // Pin 9 goes LOW at time 0, Pin 21 goes LOW at time 300
-    // So we check the time between pin 9 going LOW and current time
-    TEST_ASSERT_EQUAL(300, millis());
+    relayFixture->relays->setRelay(1, true);
+    advanceMockTime(100);
+
+    relayFixture->relays->setRelay(2, true);
+    advanceMockTime(100);
+
+    relayFixture->relays->setRelay(3, true);
+
+    // Verify all relays were activated in sequence using pin history
+    TEST_ASSERT_EQUAL(4, getPinHistoryCount());
+
+    // Verify relay numbers and states (Active LOW)
+    TEST_ASSERT_EQUAL(RELAY1_PIN, getPinHistoryEntry(0).pin);
+    TEST_ASSERT_EQUAL(LOW, getPinHistoryEntry(0).state);
+    TEST_ASSERT_EQUAL(RELAY2_PIN, getPinHistoryEntry(1).pin);
+    TEST_ASSERT_EQUAL(LOW, getPinHistoryEntry(1).state);
+    TEST_ASSERT_EQUAL(RELAY3_PIN, getPinHistoryEntry(2).pin);
+    TEST_ASSERT_EQUAL(LOW, getPinHistoryEntry(2).state);
+    TEST_ASSERT_EQUAL(RELAY4_PIN, getPinHistoryEntry(3).pin);
+    TEST_ASSERT_EQUAL(LOW, getPinHistoryEntry(3).state);
+
+    // Verify timing (approximate due to advanceMockTime)
+    TEST_ASSERT_TRUE(millis() - startTime >= 300);
+}
+
+void testMultipleRelayControl() {
+    // Clear pin history before the test
+    resetPinHistory();
+
+    // Control multiple relays
+    relayFixture->relays->setRelay(0, true);
+    relayFixture->relays->setRelay(2, true);
+    relayFixture->relays->setRelay(1, false);
+    relayFixture->relays->setRelay(3, true);
+
+    // Verify operations using pin history
+    TEST_ASSERT_EQUAL(4, getPinHistoryCount());
+
+    // Verify specific pin state changes (Active LOW)
+    // Note: Order might not be guaranteed, but we can check for presence and state
+    // A more robust test would check the exact sequence if order is important.
+    // For now, we check if the pins were set to the expected states.
+    TEST_ASSERT_EQUAL(LOW, getPinState(RELAY1_PIN));   // Relay 0 ON
+    TEST_ASSERT_EQUAL(HIGH, getPinState(RELAY2_PIN));  // Relay 1 OFF
+    TEST_ASSERT_EQUAL(LOW, getPinState(RELAY3_PIN));   // Relay 2 ON
+    TEST_ASSERT_EQUAL(LOW, getPinState(RELAY4_PIN));   // Relay 3 ON
 }

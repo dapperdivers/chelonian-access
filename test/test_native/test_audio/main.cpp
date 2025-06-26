@@ -1,6 +1,13 @@
 #include <unity.h>
 #include "test_helpers.h"
 
+// External fixture from test_helpers.cpp
+extern AudioTestFixture* audioFixture;
+
+// External base functions from test_helpers.cpp
+extern void baseSetUp();
+extern void baseTearDown();
+
 // Declare test functions
 void testAudioInitialization();
 void testAudioVolumeControl();
@@ -11,7 +18,25 @@ void testAudioStatusMonitoring();
 void testAudioSourceControl();
 void testAudioSourceEnsuresBuiltinOnInit();
 
-// setUp and tearDown are defined in test_helpers.cpp
+// Audio-specific setUp and tearDown
+void setUp() {
+    baseSetUp();
+    audioFixture = new AudioTestFixture();
+
+    // Initialize the audio mock
+    if (audioFixture && audioFixture->audio) {
+        audioFixture->audio->begin();
+    }
+}
+
+void tearDown() {
+    // Delete the fixture before calling baseTearDown
+    if (audioFixture) {
+        delete audioFixture;
+        audioFixture = nullptr;
+    }
+    baseTearDown();
+}
 
 int main(int /*argc*/, char** /*argv*/) {
     UNITY_BEGIN();

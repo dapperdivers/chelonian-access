@@ -7,7 +7,11 @@ std::array<PinStateChange, MAX_PIN_HISTORY> mockPinHistory{};
 uint8_t mockHistoryIndex = 0;
 millis_t mockMillis = 0;
 millis_t mock_delay_time = 0;
-HardwareSerial serial;
+SoftwareSerial audioSerial(0, 1);
+
+#ifdef UNIT_TEST
+HardwareSerial Serial(0);  // Using UART0 for Serial on ESP32-C3
+#endif
 
 // Forward declarations
 void recordPinStateChange(uint8_t pin, uint8_t state);
@@ -37,7 +41,7 @@ millis_t millis(void) {
     return mockMillis;
 }
 
-void delay(unsigned long ms) {
+void delay(millis_t ms) {
     mock_delay_time += ms;
     mockMillis += ms;
 }

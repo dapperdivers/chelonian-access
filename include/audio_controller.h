@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IAudioController.h"
+
 #ifdef UNIT_TEST
 #include "mock_arduino.h"
 #ifdef USINGMP3
@@ -7,8 +9,8 @@
 #endif
 #else
 #include <Arduino.h>
+#include <SoftwareSerial.h>  // For SoftwareSerial on ESP32-C3
 #ifdef USINGMP3
-#include <HardwareSerial.h>
 #include <JQ6500_Serial.h>
 #endif
 #endif
@@ -19,12 +21,12 @@
 #define MP3_STATUS_PAUSED 2
 
 // JQ6500 Source constants
-#define MP3_SRC_BUILTIN 0
+#define MP3_SRC_BUILTIN 4
 #define MP3_SRC_SDCARD 1
 
-class AudioPlayer {
+class AudioController : public IAudioController {
 public:
-    AudioPlayer(uint8_t rx_pin = 0, uint8_t tx_pin = 1);  // ESP32-C3 Serial1 pins
+    AudioController(uint8_t rx_pin = 0, uint8_t tx_pin = 1);  // ESP32-C3 Serial1 pins
 
     bool begin();
     void setVolume(uint8_t volume);
@@ -40,15 +42,8 @@ public:
     void setSource(uint8_t source);
     uint8_t getSource() const;  // Note: JQ6500 doesn't actually have a getSource command
 
-    // Sound effect constants
-    static constexpr uint8_t SOUND_STARTUP = 1;
-    static constexpr uint8_t SOUND_WAITING = 2;
-    static constexpr uint8_t SOUND_ACCEPTED = 3;
-    static constexpr uint8_t SOUND_DENIED_1 = 4;
-    static constexpr uint8_t SOUND_DENIED_2 = 5;
-    static constexpr uint8_t SOUND_DENIED_3 = 6;
-
 private:
+    SoftwareSerial* audioSerial = nullptr;
     bool m_initialized{false};
     uint8_t m_current_volume{20};
     uint8_t m_rx_pin;
@@ -57,12 +52,9 @@ private:
         MP3_SRC_BUILTIN};  // Track source internally since JQ6500 doesn't provide getSource
 
 #ifdef USINGMP3
-    // Mock state for unit testing
+    // State for MP3 player
 public:
     bool audio_enabled{false};
-    HardwareSerial* serial;
-    JQ6500Serial* player{nullptr};
-
-private:  // Keep private in production
+    JQ6500_Serial* player{nullptr};
 #endif
 };

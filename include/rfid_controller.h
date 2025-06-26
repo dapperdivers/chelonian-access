@@ -1,6 +1,6 @@
 #pragma once
-
 #include <array>
+#include "IRFIDController.h"
 
 #ifdef UNIT_TEST
 #include "mock_arduino.h"
@@ -10,7 +10,7 @@
 #include <Arduino.h>
 #endif
 
-class RFIDController {
+class RFIDController : public IRFIDController {
 public:
     // ESP32-C3 SPI SS pin
     RFIDController(uint8_t ss_pin = 5);
@@ -27,7 +27,7 @@ private:
     static constexpr uint8_t MAX_4B_UIDS = 1;
     static constexpr uint8_t MAX_7B_UIDS = 2;
     uint8_t m_ss_pin;
-    AdafruitPN532* m_nfc;  // Using SPI interface
+    Adafruit_PN532* m_nfc;  // Using SPI interface
 
     std::array<std::array<uint8_t, 4>, MAX_4B_UIDS> m_uids4B{};
     std::array<std::array<uint8_t, 7>, MAX_7B_UIDS> m_uids7B{};

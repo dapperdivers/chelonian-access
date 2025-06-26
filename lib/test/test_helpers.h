@@ -2,7 +2,7 @@
 #define TEST_HELPERS_H
 
 #include <unity.h>
-#include "audio_player.h"
+#include "audio_controller.h"
 #include "mock_arduino.h"
 #include "relay_controller.h"
 #include "rfid_controller.h"

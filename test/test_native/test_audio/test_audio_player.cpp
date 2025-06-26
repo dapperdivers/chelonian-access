@@ -1,5 +1,5 @@
 #include <unity.h>
-#include "audio_player.h"
+#include "audio_controller.h"
 #include "test_helpers.h"
 
 void testAudioInitialization() {

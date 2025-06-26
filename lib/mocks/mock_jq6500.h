@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include "mock_arduino.h"  // Include this to get HardwareSerial definition
 
 // JQ6500 Status constants (matching the real library)
 #ifndef MP3_STATUS_STOPPED
@@ -12,14 +11,18 @@
 
 // JQ6500 Source constants
 #ifndef MP3_SRC_BUILTIN
-#define MP3_SRC_BUILTIN 0
+#define MP3_SRC_BUILTIN 4
 #define MP3_SRC_SDCARD 1
 #endif
 
 // Mock JQ6500_Serial class for unit testing
-class JQ6500Serial {
+class JQ6500_Serial {
 public:
-    JQ6500Serial(HardwareSerial& serial) : m_serial(serial) {}
+    JQ6500_Serial(uint8_t rx, uint8_t tx) {
+        // Optionally store rx/tx for test inspection
+        m_rx = rx;
+        m_tx = tx;
+    }
 
     void reset() {
         // Mock reset functionality
@@ -80,7 +83,8 @@ public:
     }
 
 private:
-    HardwareSerial& m_serial;
+    uint8_t m_rx{0};
+    uint8_t m_tx{0};
     uint8_t m_volume{20};
     bool m_is_playing{false};
     uint8_t m_last_played_track{0};

@@ -2,8 +2,16 @@
 #include <array>
 #include <cstring>
 
+#ifdef UNIT_TEST
+#include "mock_arduino.h"
+#include "mock_pn532.h"
+#else
+#include <Adafruit_PN532.h>
+#include <Arduino.h>
+#endif
+
 RFIDController::RFIDController(uint8_t ss_pin)
-    : m_ss_pin(ss_pin), m_nfc(new AdafruitPN532(m_ss_pin)) {
+    : m_ss_pin(ss_pin), m_nfc(new Adafruit_PN532(m_ss_pin)) {
     // Using SPI interface with Adafruit_PN532
 }
 
@@ -12,12 +20,12 @@ bool RFIDController::begin() {
 
     uint32_t versiondata = m_nfc->getFirmwareVersion();
     if (versiondata == 0u) {
-        HardwareSerial::print(F("Didn't find PN53x board"));
+        Serial.print(F("Didn't find PN53x board"));
         return false;
     }
 
     // Configure board to read RFID tags
-    m_nfc->samConfig();
+    m_nfc->SAMConfig();
     return true;
 }
 
@@ -63,12 +71,12 @@ uint32_t RFIDController::getFirmwareVersion() {
 void RFIDController::printFirmwareVersion() {
     uint32_t versiondata = getFirmwareVersion();
     if (versiondata != 0u) {
-        HardwareSerial::print(F("Found chip PN5"));
-        HardwareSerial::println((versiondata >> 24) & 0xFF, HEX);
-        HardwareSerial::print(F("Firmware ver. "));
-        HardwareSerial::print((versiondata >> 16) & 0xFF, DEC);
-        HardwareSerial::print('.');
-        HardwareSerial::println((versiondata >> 8) & 0xFF, DEC);
+        Serial.print(F("Found chip PN5"));
+        Serial.println((versiondata >> 24) & 0xFF, HEX);
+        Serial.print(F("Firmware ver. "));
+        Serial.print((versiondata >> 16) & 0xFF, DEC);
+        Serial.print('.');
+        Serial.println((versiondata >> 8) & 0xFF, DEC);
     }
 }
 

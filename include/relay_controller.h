@@ -1,22 +1,25 @@
 #pragma once
 
 #include <array>
+#include <cstdint>  // Include for uint8_t
+#include "IRelayController.h"
+#include "mock_arduino.h"  // Include for definitions like OUTPUT, HIGH, LOW
 
-#ifdef UNIT_TEST
-#include "mock_arduino.h"
-#else
-#include <Arduino.h>
-#endif
+// Define function pointer types for hardware interaction
+using pinMode_t = void (*)(uint8_t pin, uint8_t mode);
+using digitalWrite_t = void (*)(uint8_t pin, uint8_t val);
 
-class RelayController {
+class RelayController : public IRelayController {
 public:
-    // ESP32-C3 GPIO pins
-    RelayController(uint8_t relay1_pin = 9, uint8_t relay2_pin = 10, uint8_t relay3_pin = 20,
+    // Constructor accepts function pointers for hardware interaction
+    RelayController(pinMode_t pinMode_func, digitalWrite_t digitalWrite_func,
+                    uint8_t relay1_pin = 9, uint8_t relay2_pin = 10, uint8_t relay3_pin = 20,
                     uint8_t relay4_pin = 21);
-    void begin();
-    void setRelay(uint8_t relay, bool state);
-    void setAllRelays(bool state);
-    bool getRelayState(uint8_t relay) const;
+
+    void begin() override;
+    void setRelay(uint8_t relay, bool state) override;
+    void setAllRelays(bool state) override;
+    bool getRelayState(uint8_t relay) const override;
 
 private:
     struct RelayPin {
@@ -26,6 +29,10 @@ private:
 
     static constexpr uint8_t NUM_RELAYS = 4;
     std::array<RelayPin, NUM_RELAYS> m_relays{};
+
+    // Function pointers for hardware interaction
+    pinMode_t m_pinMode;
+    digitalWrite_t m_digitalWrite;
 
     static bool isValidRelay(uint8_t relay);
 };

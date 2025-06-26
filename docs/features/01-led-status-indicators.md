@@ -104,7 +104,7 @@ public:
 private:
     uint8_t pin;
     LEDPattern current_pattern;
-    unsigned long last_update;
+    millis_t last_update;
     uint8_t pattern_state;
     uint8_t brightness;
 

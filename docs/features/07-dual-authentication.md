@@ -35,8 +35,8 @@ Implement two-factor authentication requiring two different credentials for high
       RFIDController reader2;
       bool card1Valid;
       bool card2Valid;
-      unsigned long card1Time;
-      unsigned long card2Time;
+      millis_t card1Time;
+      millis_t card2Time;
   public:
       bool checkDualAuth();
       void setTimeout(uint16_t seconds);
@@ -58,7 +58,7 @@ Implement two-factor authentication requiring two different credentials for high
       uint8_t uidLength;
       uint16_t pin;  // 4-6 digit PIN
       uint8_t attempts;
-      unsigned long lockoutTime;
+      millis_t lockoutTime;
   };
   ```
 - [ ] PIN entry flow:

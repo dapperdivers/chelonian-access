@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IAudioController.h"
+
 #ifdef UNIT_TEST
 #include "mock_arduino.h"
 #ifdef USINGMP3
@@ -22,9 +24,9 @@
 #define MP3_SRC_BUILTIN 4
 #define MP3_SRC_SDCARD 1
 
-class AudioPlayer {
+class AudioController : public IAudioController {
 public:
-    AudioPlayer(uint8_t rx_pin = 0, uint8_t tx_pin = 1);  // ESP32-C3 Serial1 pins
+    AudioController(uint8_t rx_pin = 0, uint8_t tx_pin = 1);  // ESP32-C3 Serial1 pins
 
     bool begin();
     void setVolume(uint8_t volume);
@@ -39,14 +41,6 @@ public:
     // Source control methods
     void setSource(uint8_t source);
     uint8_t getSource() const;  // Note: JQ6500 doesn't actually have a getSource command
-
-    // Sound effect constants
-    static constexpr uint8_t SOUND_STARTUP = 1;
-    static constexpr uint8_t SOUND_WAITING = 2;
-    static constexpr uint8_t SOUND_ACCEPTED = 3;
-    static constexpr uint8_t SOUND_DENIED_1 = 4;
-    static constexpr uint8_t SOUND_DENIED_2 = 5;
-    static constexpr uint8_t SOUND_DENIED_3 = 6;
 
 private:
     SoftwareSerial* audioSerial = nullptr;

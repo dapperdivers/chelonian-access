@@ -3,7 +3,7 @@
 #include "mock_arduino.h"
 
 // Global variable to track total delay time
-extern millis_t mock_delay_time;
+extern int mock_delay_time;
 
 // Common test utilities and helper functions
 void resetTestState() {
@@ -13,28 +13,33 @@ void resetTestState() {
 // Initialize fixture pointers
 AudioTestFixture* audioFixture = nullptr;
 RelayTestFixture* relayFixture = nullptr;
-IntegrationTestFixture* integrationFixture = nullptr;
 RFIDTestFixture* rfidFixture = nullptr;
+AccessTestFixture* accessFixture = nullptr;
 
-void setUp() {
+// Base setUp and tearDown functions that only reset mock state
+void baseSetUp() {
     TEST_PROTECT();
     resetMockState();
-    audioFixture = new AudioTestFixture();
-    relayFixture = new RelayTestFixture();
-    integrationFixture = new IntegrationTestFixture();
-    rfidFixture = new RFIDTestFixture();
 }
 
-void tearDown() {
+void baseTearDown() {
     TEST_PROTECT();
-    delete audioFixture;
-    delete relayFixture;
-    delete integrationFixture;
-    delete rfidFixture;
-    audioFixture = nullptr;
-    relayFixture = nullptr;
-    integrationFixture = nullptr;
-    rfidFixture = nullptr;
+    // Each test suite is responsible for cleaning up its own fixture
+    // This function only resets the mock state
+}
+
+// Centralized mock initialization function
+void initializeMocks(AudioTestFixture* audioFix, RelayTestFixture* relayFix,
+                     RFIDTestFixture* rfidFix) {
+    if (audioFix && audioFix->audio) {
+        audioFix->audio->begin();
+    }
+    if (relayFix && relayFix->relays) {
+        relayFix->relays->begin();
+    }
+    if (rfidFix && rfidFix->rfid) {
+        rfidFix->rfid->begin();
+    }
 }
 
 // Integration test helper functions

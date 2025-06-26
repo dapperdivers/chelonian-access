@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include "IRFIDController.h"
 
 #ifdef UNIT_TEST
 #include "mock_arduino.h"
@@ -9,7 +10,7 @@
 #include <Arduino.h>
 #endif
 
-class RFIDController {
+class RFIDController : public IRFIDController {
 public:
     // ESP32-C3 SPI SS pin
     RFIDController(uint8_t ss_pin = 5);

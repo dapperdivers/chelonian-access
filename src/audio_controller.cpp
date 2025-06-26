@@ -1,8 +1,9 @@
 #include "audio_controller.h"
 
-AudioPlayer::AudioPlayer(uint8_t rx_pin, uint8_t tx_pin) : m_rx_pin(rx_pin), m_tx_pin(tx_pin) {}
+AudioController::AudioController(uint8_t rx_pin, uint8_t tx_pin)
+    : m_rx_pin(rx_pin), m_tx_pin(tx_pin) {}
 
-bool AudioPlayer::begin() {
+bool AudioController::begin() {
     if (audioSerial == nullptr) {
         audioSerial = new SoftwareSerial(m_rx_pin, m_tx_pin);
     }
@@ -27,7 +28,7 @@ bool AudioPlayer::begin() {
     return false;
 }
 
-void AudioPlayer::setVolume(uint8_t volume) {
+void AudioController::setVolume(uint8_t volume) {
     if (!m_initialized) {
         return;
     }
@@ -44,7 +45,7 @@ void AudioPlayer::setVolume(uint8_t volume) {
     }
 }
 
-void AudioPlayer::playTrack(uint8_t track) const {
+void AudioController::playTrack(uint8_t track) const {
     if (!m_initialized) {
         return;
     }
@@ -54,13 +55,13 @@ void AudioPlayer::playTrack(uint8_t track) const {
     }
 }
 
-void AudioPlayer::reset() const {
+void AudioController::reset() const {
     if (player != nullptr) {
         player->reset();
     }
 }
 
-uint8_t AudioPlayer::getStatus() const {
+uint8_t AudioController::getStatus() const {
     if (!m_initialized || !audio_enabled) {
         return MP3_STATUS_STOPPED;
     }
@@ -69,7 +70,7 @@ uint8_t AudioPlayer::getStatus() const {
     return status;
 }
 
-uint8_t AudioPlayer::getVolume() const {
+uint8_t AudioController::getVolume() const {
     if (!m_initialized || !audio_enabled) {
         return 0;
     }
@@ -78,7 +79,7 @@ uint8_t AudioPlayer::getVolume() const {
     return m_current_volume;
 }
 
-uint16_t AudioPlayer::getCurrentPosition() const {
+uint16_t AudioController::getCurrentPosition() const {
     if (!m_initialized || !audio_enabled) {
         return 0;
     }
@@ -86,7 +87,7 @@ uint16_t AudioPlayer::getCurrentPosition() const {
     return player->currentFilePositionInSeconds();
 }
 
-void AudioPlayer::setSource(uint8_t source) {
+void AudioController::setSource(uint8_t source) {
     if (!m_initialized || !audio_enabled) {
         return;
     }
@@ -98,7 +99,7 @@ void AudioPlayer::setSource(uint8_t source) {
     }
 }
 
-uint8_t AudioPlayer::getSource() const {
+uint8_t AudioController::getSource() const {
     // Return our cached source value since JQ6500 doesn't provide a getSource method
     return m_current_source;
 }

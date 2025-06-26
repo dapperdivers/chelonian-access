@@ -37,8 +37,8 @@ Implement ultra-low power deep sleep mode for the ESP32-C3 SuperMini, reducing p
   class PowerSaveController {
   private:
       gpio_num_t wakePin;
-      unsigned long lastActivity;
-      unsigned long sleepTimeout;
+      millis_t lastActivity;
+      millis_t sleepTimeout;
       RTC_DATA_ATTR int bootCount = 0;
   public:
       void begin(gpio_num_t pin = GPIO_NUM_0);

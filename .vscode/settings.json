@@ -2,6 +2,7 @@
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/src",
         "${workspaceFolder}/include",
+        "${workspaceFolder}/lib",
         "${workspaceFolder}/test",
         "${workspaceFolder}/test/mocks"
     ],
@@ -13,6 +14,9 @@
         "unordered_map": "cpp",
         "vector": "cpp",
         "string_view": "cpp",
-        "initializer_list": "cpp"
-    }
+        "initializer_list": "cpp",
+        "new": "cpp"
+    },
+    "C_Cpp.dimInactiveRegions": true,
+    "sonarlint.pathToCompileCommands": "${workspaceFolder}/compile_commands.json"
 }

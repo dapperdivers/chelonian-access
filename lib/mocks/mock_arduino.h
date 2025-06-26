@@ -18,7 +18,7 @@
 #endif
 
 // Type definitions
-using millis_t = unsigned long;
+using millis_t = unsigned long;  // Use unsigned long for milliseconds
 using boolean = bool;
 
 // Maximum number of state changes to track
@@ -26,11 +26,15 @@ using boolean = bool;
 #define MAX_PINS 22  // Increased to support GPIO 20 and 21 on ESP32-C3
 
 // Macro definitions
+// Note: min/max macros can conflict with C++ STL
+// Only define them if explicitly needed for Arduino compatibility
+#ifdef ARDUINO_MOCK_DEFINE_MIN_MAX
 #ifndef min
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #ifndef max
 #define max(a, b) ((a) > (b) ? (a) : (b))
+#endif
 #endif
 #define F(string_literal) (string_literal)
 
@@ -47,7 +51,7 @@ public:
     HardwareSerial(int uart_nr = 0) : m_uart_nr(uart_nr) {}
 
     // ESP32-style begin with config and pins
-    void begin(unsigned long baud, uint32_t /*config*/ = SERIAL_8N1, int8_t rxPin = -1,
+    void begin(millis_t baud, uint32_t /*config*/ = SERIAL_8N1, int8_t rxPin = -1,
                int8_t txPin = -1) {
         m_baud_rate = baud;
         m_rx_pin = rxPin;
@@ -95,7 +99,7 @@ public:
     }
 
     // Getters for testing
-    unsigned long getBaudRate() const {
+    millis_t getBaudRate() const {
         return m_baud_rate;
     }
     int8_t getRxPin() const {
@@ -107,7 +111,7 @@ public:
 
 private:
     int m_uart_nr;
-    unsigned long m_baud_rate = 0;
+    millis_t m_baud_rate = 0;
     int8_t m_rx_pin = -1;
     int8_t m_tx_pin = -1;
 };
@@ -117,7 +121,7 @@ class SoftwareSerial {
 public:
     SoftwareSerial(int8_t rxPin, int8_t txPin)
         : m_rx(rxPin), m_tx(txPin), m_baud(0), m_begun(false) {}
-    void begin(unsigned long baud) {
+    void begin(millis_t baud) {
         m_baud = baud;
         m_begun = true;
     }
@@ -138,7 +142,7 @@ public:
     bool isBegun() const {
         return m_begun;
     }
-    unsigned long getBaud() const {
+    millis_t getBaud() const {
         return m_baud;
     }
     int8_t getRx() const {
@@ -151,7 +155,7 @@ public:
 private:
     int8_t m_rx;
     int8_t m_tx;
-    unsigned long m_baud;
+    millis_t m_baud;
     bool m_begun;
 };
 
@@ -170,7 +174,7 @@ extern uint8_t mockHistoryIndex;
 void pinMode(uint8_t pin, uint8_t mode);
 void digitalWrite(uint8_t pin, uint8_t state);
 uint8_t digitalRead(uint8_t pin);
-void delay(unsigned long ms);
+void delay(millis_t ms);
 millis_t millis();
 
 // Test helper functions

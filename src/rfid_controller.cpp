@@ -1,6 +1,7 @@
 #include "rfid_controller.h"
 #include <array>
 #include <cstring>
+#include "IRFIDController.h"
 
 #ifdef UNIT_TEST
 #include "mock_arduino.h"

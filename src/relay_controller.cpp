@@ -1,5 +1,12 @@
 #include "relay_controller.h"
 
+#ifdef UNIT_TEST
+#include "mock_esp_log.h"  // Add ESP_LOGX header
+#else
+#include "esp_log.h"
+#endif
+
+static const char* TAG = "RELAY";  // Add TAG definition
 RelayController::RelayController(uint8_t relay1_pin, uint8_t relay2_pin, uint8_t relay3_pin,
                                  uint8_t relay4_pin) {
     m_relays[0] = {relay1_pin, false};
@@ -12,10 +19,7 @@ void RelayController::begin() {
     for (uint8_t i = 0; i < NUM_RELAYS; i++) {
         pinMode(m_relays[i].pin, OUTPUT);
 
-        Serial.print(F("[RELAY] Relay "));
-        Serial.print(i + 1);
-        Serial.print(F(" initialized on pin "));
-        Serial.println(m_relays[i].pin);
+        ESP_LOGI(TAG, "Relay %u initialized on pin %u", i + 1, m_relays[i].pin);
 
         setRelay(i, false);  // Initialize all relays to OFF state
     }
@@ -27,20 +31,12 @@ void RelayController::setRelay(uint8_t relay, bool state) {
         // Active LOW relay logic
         digitalWrite(m_relays[relay].pin, static_cast<uint8_t>(!state));
 
-        Serial.print(F("[RELAY] "));
-        Serial.print(millis());
-        Serial.print(F("ms - Relay "));
-        Serial.print(relay + 1);
-        Serial.print(F(" set to "));
-        Serial.println(state ? F("ON") : F("OFF"));
+        ESP_LOGI(TAG, "%lu ms - Relay %u set to %s", millis(), relay + 1, state ? "ON" : "OFF");
     }
 }
 
 void RelayController::setAllRelays(bool state) {
-    Serial.print(F("[RELAY] "));
-    Serial.print(millis());
-    Serial.print(F("ms - All relays set to "));
-    Serial.println(state ? F("ON") : F("OFF"));
+    ESP_LOGI(TAG, "%lu ms - All relays set to %s", millis(), state ? "ON" : "OFF");
 
     for (uint8_t i = 0; i < NUM_RELAYS; i++) {
         setRelay(i, state);

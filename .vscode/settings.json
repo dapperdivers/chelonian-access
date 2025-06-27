@@ -15,7 +15,8 @@
         "string_view": "cpp",
         "initializer_list": "cpp",
         "exception": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "new": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

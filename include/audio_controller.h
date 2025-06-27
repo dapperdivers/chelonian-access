@@ -25,11 +25,12 @@
 class AudioPlayer {
 public:
     AudioPlayer(uint8_t rx_pin = 0, uint8_t tx_pin = 1);  // ESP32-C3 Serial1 pins
+    ~AudioPlayer();                                       // Add destructor
 
     bool begin();
     void setVolume(uint8_t volume);
-    void playTrack(uint8_t track) const;
-    void reset() const;  // JQ6500 reset method
+    void playTrack(uint8_t track);
+    void reset();  // JQ6500 reset method
 
     // Status monitoring methods
     uint8_t getStatus() const;
@@ -39,6 +40,10 @@ public:
     // Source control methods
     void setSource(uint8_t source);
     uint8_t getSource() const;  // Note: JQ6500 doesn't actually have a getSource command
+#ifdef UNIT_TEST
+    void setPosition(uint16_t seconds);  // For testing purposes
+#endif
+    uint8_t getLastPlayedTrack() const;
 
     // Sound effect constants
     static constexpr uint8_t SOUND_STARTUP = 1;
@@ -56,11 +61,11 @@ private:
     uint8_t m_tx_pin;
     uint8_t m_current_source{
         MP3_SRC_BUILTIN};  // Track source internally since JQ6500 doesn't provide getSource
+    uint8_t m_last_played_track{0};  // Store the last played track
 
 #ifdef USINGMP3
     // State for MP3 player
-public:
-    bool audio_enabled{false};
     JQ6500_Serial* player{nullptr};
 #endif
+    bool audio_enabled{false};
 };

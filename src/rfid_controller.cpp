@@ -4,23 +4,35 @@
 
 #ifdef UNIT_TEST
 #include "mock_arduino.h"
+#include "mock_esp_log.h"  // Add ESP_LOGX header
 #include "mock_pn532.h"
 #else
 #include <Adafruit_PN532.h>
 #include <Arduino.h>
+#include "esp_log.h"
 #endif
+
+static const char* TAG = "RFID";  // Add TAG definition
 
 RFIDController::RFIDController(uint8_t ss_pin)
     : m_ss_pin(ss_pin), m_nfc(new Adafruit_PN532(m_ss_pin)) {
     // Using SPI interface with Adafruit_PN532
 }
 
+RFIDController::~RFIDController() {
+    delete m_nfc;
+}
+
 bool RFIDController::begin() {
-    if (!m_nfc->begin()) {
-        Serial.println(F("Failed to initialize PN532!"));
+    m_nfc->begin();  // Call begin, which returns void
+    ESP_LOGI(TAG, "Initializing PN532...");
+
+    uint32_t versiondata = m_nfc->getFirmwareVersion();
+    if (versiondata == 0) {
+        ESP_LOGE(TAG, "Failed to initialize PN532!");
         return false;
     }
-    Serial.println(F("PN532 initialized successfully!"));
+    ESP_LOGI(TAG, "PN532 initialized successfully!");
 
     // Configure board to read RFID tags
     m_nfc->SAMConfig();
@@ -29,57 +41,53 @@ bool RFIDController::begin() {
 
 bool RFIDController::readCard(uint8_t* uid, uint8_t* uidLength) {
     bool result = m_nfc->readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, uidLength);
-    Serial.print(F("[RFID] "));
-    Serial.print(millis());
-    Serial.print(F("ms - "));
     if (result) {
-        Serial.print(F("Card detected: UID="));
+        ESP_LOGI(TAG, "%lu ms - Card detected: UID=", millis());
+        char uidStr[50] = "";
         for (uint8_t i = 0; i < *uidLength; i++) {
-            if (uid[i] < 0x10)
-                Serial.print(F("0"));
-            Serial.print(uid[i], HEX);
-            if (i < *uidLength - 1)
-                Serial.print(F(":"));
+            char hexBuf[5];
+            sprintf(hexBuf, "%02X:", uid[i]);
+            strcat(uidStr, hexBuf);
         }
-        Serial.println();
+        uidStr[strlen(uidStr) - 1] = '\0';  // Remove last colon
+        ESP_LOGI(TAG, "%s", uidStr);
     } else {
-        Serial.println(F("No card detected"));
+        ESP_LOGI(TAG, "No card detected");
     }
     return result;
 }
 
 bool RFIDController::validateUID(const uint8_t* uid, uint8_t uidLength) {
-    Serial.print(F("[AUTH] "));
-    Serial.print(millis());
-    Serial.print(F("ms - Validating UID="));
+    ESP_LOGI(TAG, "%lu ms - Validating UID=", millis());
+    char uidStrValidate[50] = "";
     for (uint8_t i = 0; i < uidLength; i++) {
-        if (uid[i] < 0x10)
-            Serial.print(F("0"));
-        Serial.print(uid[i], HEX);
-        if (i < uidLength - 1)
-            Serial.print(F(":"));
+        char hexBuf[5];
+        sprintf(hexBuf, "%02X:", uid[i]);
+        strcat(uidStrValidate, hexBuf);
     }
+    uidStrValidate[strlen(uidStrValidate) - 1] = '\0';  // Remove last colon
+    ESP_LOGI(TAG, "%s", uidStrValidate);
 
     if (uidLength == 4) {
         for (uint8_t i = 0; i < m_num4BUIDs; i++) {
             if (compare4BUID(m_uids4B[i].data(), uid)) {
-                Serial.println(F(" - Authentication successful (4B)"));
+                ESP_LOGI(TAG, " - Authentication successful (4B)");
                 return true;
             }
         }
     } else if (uidLength == 7) {
         for (uint8_t i = 0; i < m_num7BUIDs; i++) {
             if (compare7BUID(m_uids7B[i].data(), uid)) {
-                Serial.println(F(" - Authentication successful (7B)"));
+                ESP_LOGI(TAG, " - Authentication successful (7B)");
                 return true;
             }
         }
     } else {
-        Serial.println(F(" - Authentication failed: Invalid UID length"));
+        ESP_LOGW(TAG, " - Authentication failed: Invalid UID length");
         return false;
     }
 
-    Serial.println(F(" - Authentication failed: No matching UID"));
+    ESP_LOGW(TAG, " - Authentication failed: No matching UID");
     return false;
 }
 
@@ -104,12 +112,9 @@ uint32_t RFIDController::getFirmwareVersion() {
 void RFIDController::printFirmwareVersion() {
     uint32_t versiondata = getFirmwareVersion();
     if (versiondata != 0u) {
-        Serial.print(F("Found chip PN5"));
-        Serial.println((versiondata >> 24) & 0xFF, HEX);
-        Serial.print(F("Firmware ver. "));
-        Serial.print((versiondata >> 16) & 0xFF, DEC);
-        Serial.print('.');
-        Serial.println((versiondata >> 8) & 0xFF, DEC);
+        ESP_LOGI(TAG, "Found chip PN5");
+        ESP_LOGI(TAG, "%02X", (versiondata >> 24) & 0xFF);  // Log the value
+        ESP_LOGI(TAG, "Firmware ver. %u.%u", (versiondata >> 16) & 0xFF, (versiondata >> 8) & 0xFF);
     }
 }
 

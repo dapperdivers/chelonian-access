@@ -1,6 +1,4 @@
 #include <unity.h>
-#include "mock_arduino.h"
-#include "mock_pn532.h"
 #include "rfid_controller.h"
 #include "test_helpers.h"
 

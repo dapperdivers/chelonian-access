@@ -1,12 +1,24 @@
 #include "audio_controller.h"
+
+#ifdef UNIT_TEST
+#include "mock_arduino.h"
+#include "mock_esp_log.h"
+#else
 #include <Arduino.h>
+#include "esp_log.h"
+#endif
+
+static const char* TAG = "Audio";
 
 AudioPlayer::AudioPlayer(uint8_t rx_pin, uint8_t tx_pin) : m_rx_pin(rx_pin), m_tx_pin(tx_pin) {}
 
+AudioPlayer::~AudioPlayer() {
+    delete audioSerial;
+    delete player;
+}
+
 bool AudioPlayer::begin() {
-    Serial.print("[AUDIO] ");
-    Serial.print(millis());
-    Serial.println(" - Initializing audio controller...");
+    ESP_LOGI(TAG, "%lu - Initializing audio controller...", millis());
     if (audioSerial == nullptr) {
         audioSerial = new SoftwareSerial(m_rx_pin, m_tx_pin);
     }
@@ -27,17 +39,11 @@ bool AudioPlayer::begin() {
 
         audio_enabled = true;
         m_initialized = true;
-        Serial.print("[AUDIO] ");
-        Serial.print(millis());
-        Serial.print(" - Initialized successfully. Volume: ");
-        Serial.print(m_current_volume);
-        Serial.print(", Source: ");
-        Serial.println(m_current_source == MP3_SRC_BUILTIN ? "Built-in" : "SD Card");
+        ESP_LOGI(TAG, "%lu - Initialized successfully. Volume: %d, Source: %s", millis(),
+                 m_current_volume, m_current_source == MP3_SRC_BUILTIN ? "Built-in" : "SD Card");
         return true;
     }
-    Serial.print("[AUDIO] ");
-    Serial.print(millis());
-    Serial.println(" - Initialization failed!");
+    ESP_LOGE(TAG, "%lu - Initialization failed!", millis());
     return false;
 }
 
@@ -45,11 +51,7 @@ void AudioPlayer::setVolume(uint8_t volume) {
     if (!m_initialized) {
         return;
     }
-    Serial.print("[AUDIO] ");
-    Serial.print(millis());
-    Serial.print(" - Volume changing from ");
-    Serial.print(m_current_volume);
-    Serial.print(" to ");
+    ESP_LOGI(TAG, "%lu - Volume changing from %d to ", millis(), m_current_volume);
 
     // Clamp volume between 0-30
     if (volume > 30) {
@@ -60,31 +62,27 @@ void AudioPlayer::setVolume(uint8_t volume) {
 
     if (audio_enabled) {
         player->setVolume(m_current_volume);
-        Serial.println(m_current_volume);
+        ESP_LOGI(TAG, "%d", m_current_volume);
     } else {
-        Serial.println(" (audio disabled)");
+        ESP_LOGI(TAG, " (audio disabled)");
     }
 }
 
-void AudioPlayer::playTrack(uint8_t track) const {
+void AudioPlayer::playTrack(uint8_t track) {
     if (!m_initialized) {
         return;
     }
-    Serial.print("[AUDIO] ");
-    Serial.print(millis());
-    Serial.print(" - Playing track ");
-    Serial.println(track);
+    ESP_LOGI(TAG, "%lu - Playing track %d", millis(), track);
 
     if (audio_enabled) {
         player->playFileByIndexNumber(track);
+        m_last_played_track = track;
     }
 }
 
-void AudioPlayer::reset() const {
+void AudioPlayer::reset() {
     if (player != nullptr) {
-        Serial.print("[AUDIO] ");
-        Serial.print(millis());
-        Serial.println(" - Resetting audio player");
+        ESP_LOGI(TAG, "%lu - Resetting audio player", millis());
         player->reset();
     }
 }
@@ -131,3 +129,16 @@ uint8_t AudioPlayer::getSource() const {
     // Return our cached source value since JQ6500 doesn't provide a getSource method
     return m_current_source;
 }
+
+uint8_t AudioPlayer::getLastPlayedTrack() const {
+    return m_last_played_track;
+}
+
+#ifdef UNIT_TEST
+void AudioPlayer::setPosition(uint16_t seconds) {
+    if (!m_initialized || !audio_enabled) {
+        return;
+    }
+    player->setPosition(seconds);
+}
+#endif

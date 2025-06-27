@@ -4,6 +4,7 @@
 #include <unity.h>
 #include "audio_controller.h"
 #include "mock_arduino.h"
+#include "mock_esp_log.h"  // Add ESP_LOGX header
 #include "relay_controller.h"
 #include "rfid_controller.h"
 

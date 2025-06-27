@@ -24,28 +24,22 @@ void testAudioPlayTracks() {
 
     // Test playing different tracks and verify with mock
     audioFixture->audio->playTrack(AudioPlayer::SOUND_STARTUP);
-    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_STARTUP,
-                      audioFixture->audio->player->getLastPlayedTrack());
+    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_STARTUP, audioFixture->audio->getLastPlayedTrack());
 
     audioFixture->audio->playTrack(AudioPlayer::SOUND_WAITING);
-    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_WAITING,
-                      audioFixture->audio->player->getLastPlayedTrack());
+    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_WAITING, audioFixture->audio->getLastPlayedTrack());
 
     audioFixture->audio->playTrack(AudioPlayer::SOUND_ACCEPTED);
-    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_ACCEPTED,
-                      audioFixture->audio->player->getLastPlayedTrack());
+    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_ACCEPTED, audioFixture->audio->getLastPlayedTrack());
 
     audioFixture->audio->playTrack(AudioPlayer::SOUND_DENIED_1);
-    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_DENIED_1,
-                      audioFixture->audio->player->getLastPlayedTrack());
+    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_DENIED_1, audioFixture->audio->getLastPlayedTrack());
 
     audioFixture->audio->playTrack(AudioPlayer::SOUND_DENIED_2);
-    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_DENIED_2,
-                      audioFixture->audio->player->getLastPlayedTrack());
+    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_DENIED_2, audioFixture->audio->getLastPlayedTrack());
 
     audioFixture->audio->playTrack(AudioPlayer::SOUND_DENIED_3);
-    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_DENIED_3,
-                      audioFixture->audio->player->getLastPlayedTrack());
+    TEST_ASSERT_EQUAL(AudioPlayer::SOUND_DENIED_3, audioFixture->audio->getLastPlayedTrack());
 
     // Test playing before initialization
     AudioPlayer uninitializedAudio;
@@ -91,7 +85,7 @@ void testAudioStatusMonitoring() {
     TEST_ASSERT_EQUAL(0, audioFixture->audio->getCurrentPosition());
 
     // Simulate position change in mock
-    audioFixture->audio->player->setPosition(10);
+    audioFixture->audio->setPosition(10);
     TEST_ASSERT_EQUAL(10, audioFixture->audio->getCurrentPosition());
 }
 
@@ -106,12 +100,12 @@ void testAudioSourceControl() {
     TEST_ASSERT_EQUAL(MP3_SRC_SDCARD, audioFixture->audio->getSource());
 
     // Verify mock also has correct source
-    TEST_ASSERT_EQUAL(MP3_SRC_SDCARD, audioFixture->audio->player->getSource());
+    TEST_ASSERT_EQUAL(MP3_SRC_SDCARD, audioFixture->audio->getSource());
 
     // Set back to built-in
     audioFixture->audio->setSource(MP3_SRC_BUILTIN);
     TEST_ASSERT_EQUAL(MP3_SRC_BUILTIN, audioFixture->audio->getSource());
-    TEST_ASSERT_EQUAL(MP3_SRC_BUILTIN, audioFixture->audio->player->getSource());
+    TEST_ASSERT_EQUAL(MP3_SRC_BUILTIN, audioFixture->audio->getSource());
 }
 
 void testAudioSourceEnsuresBuiltinOnInit() {

@@ -8,3 +8,13 @@ coverage-report
 coverage.info
 development
 logs/
+
+
+# ai stuff
+.roo/
+memory-bank/
+context_portal/
+.roomodes
+generate_mcp_yaml.py
+install_rooflow*
+system_prompt.md

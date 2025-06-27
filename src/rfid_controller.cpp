@@ -16,13 +16,11 @@ RFIDController::RFIDController(uint8_t ss_pin)
 }
 
 bool RFIDController::begin() {
-    m_nfc->begin();
-
-    uint32_t versiondata = m_nfc->getFirmwareVersion();
-    if (versiondata == 0u) {
-        Serial.print(F("Didn't find PN53x board"));
+    if (!m_nfc->begin()) {
+        Serial.println(F("Failed to initialize PN532!"));
         return false;
     }
+    Serial.println(F("PN532 initialized successfully!"));
 
     // Configure board to read RFID tags
     m_nfc->SAMConfig();
@@ -30,23 +28,58 @@ bool RFIDController::begin() {
 }
 
 bool RFIDController::readCard(uint8_t* uid, uint8_t* uidLength) {
-    return m_nfc->readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, uidLength);
+    bool result = m_nfc->readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, uidLength);
+    Serial.print(F("[RFID] "));
+    Serial.print(millis());
+    Serial.print(F("ms - "));
+    if (result) {
+        Serial.print(F("Card detected: UID="));
+        for (uint8_t i = 0; i < *uidLength; i++) {
+            if (uid[i] < 0x10)
+                Serial.print(F("0"));
+            Serial.print(uid[i], HEX);
+            if (i < *uidLength - 1)
+                Serial.print(F(":"));
+        }
+        Serial.println();
+    } else {
+        Serial.println(F("No card detected"));
+    }
+    return result;
 }
 
 bool RFIDController::validateUID(const uint8_t* uid, uint8_t uidLength) {
+    Serial.print(F("[AUTH] "));
+    Serial.print(millis());
+    Serial.print(F("ms - Validating UID="));
+    for (uint8_t i = 0; i < uidLength; i++) {
+        if (uid[i] < 0x10)
+            Serial.print(F("0"));
+        Serial.print(uid[i], HEX);
+        if (i < uidLength - 1)
+            Serial.print(F(":"));
+    }
+
     if (uidLength == 4) {
         for (uint8_t i = 0; i < m_num4BUIDs; i++) {
             if (compare4BUID(m_uids4B[i].data(), uid)) {
+                Serial.println(F(" - Authentication successful (4B)"));
                 return true;
             }
         }
     } else if (uidLength == 7) {
         for (uint8_t i = 0; i < m_num7BUIDs; i++) {
             if (compare7BUID(m_uids7B[i].data(), uid)) {
+                Serial.println(F(" - Authentication successful (7B)"));
                 return true;
             }
         }
+    } else {
+        Serial.println(F(" - Authentication failed: Invalid UID length"));
+        return false;
     }
+
+    Serial.println(F(" - Authentication failed: No matching UID"));
     return false;
 }
 

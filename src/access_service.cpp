@@ -5,6 +5,7 @@
 #else
 #include <Arduino.h>
 #endif
+
 // Instantiate controllers
 RFIDController rfid;
 RelayController relays;
@@ -23,20 +24,20 @@ const uint8_t invalidDelays[MAXIMUM_INVALID_ATTEMPTS] = {1,  3,  4,  5,  8,  12,
 
 void accessServiceSetup() {
     if (!rfid.begin()) {
-        Serial.print(F("Didn't find PN53x board"));
-        while (1)
-            ;
+        Serial.print(F("[ACCESS] Error initializing RFID controller!"));
     }
     rfid.printFirmwareVersion();
     rfid.initializeDefaultUIDs();
     relays.begin();
-    relays.setAllRelays(false);
+
     if (audio.begin()) {
         audio.setVolume(20);
         delay(500);
         audio.playTrack(AudioPlayer::SOUND_STARTUP);
     }
-    Serial.println(F("Waiting for an ISO14443A card"));
+    Serial.print(F("[ACCESS] "));
+    Serial.print(millis());
+    Serial.println(F(": Waiting for an ISO14443A card"));
 }
 
 void handleRelaySequence() {
@@ -49,7 +50,9 @@ void handleRelaySequence() {
                 relays.setRelay(RELAY2_PIN, true);
                 relayActivatedTime = millis();
                 currentRelayState = RELAY2_ACTIVE;
-                Serial.println(F("Relay 1 OFF, Relay 2 ON"));
+                Serial.print(F("[ACCESS] "));
+                Serial.print(millis());
+                Serial.println(F(": Relay state transition 1->2"));
             }
             break;
         case RELAY2_ACTIVE:
@@ -57,7 +60,9 @@ void handleRelaySequence() {
                 relays.setRelay(RELAY2_PIN, false);
                 currentRelayState = RELAY_IDLE;
                 relayActive = false;
-                Serial.println(F("Relay 2 OFF - Sequence complete"));
+                Serial.print(F("[ACCESS] "));
+                Serial.print(millis());
+                Serial.println(F(": Relay sequence complete"));
             }
             break;
     }
@@ -68,7 +73,9 @@ void activateRelays() {
     relayActivatedTime = millis();
     currentRelayState = RELAY1_ACTIVE;
     relayActive = true;
-    Serial.println(F("Starting relay sequence - Relay 1 ON"));
+    Serial.print(F("[ACCESS] "));
+    Serial.print(millis());
+    Serial.println(F(": Starting relay sequence (state 1)"));
 }
 
 void accessServiceLoop() {
@@ -83,11 +90,13 @@ void accessServiceLoop() {
     success = rfid.readCard(uid, &uidLength);
     if (success) {
         scanned = true;
-        Serial.println(F("Found a card!"));
-        Serial.print(F("UID Length: "));
+        Serial.print(F("[ACCESS] "));
+        Serial.print(millis());
+        Serial.println(F(": Card detected"));
+        Serial.print(F("[ACCESS] UID Length: "));
         Serial.print(uidLength, DEC);
         Serial.println(" bytes");
-        Serial.print(F("UID Value: "));
+        Serial.print(F("[ACCESS] UID Value:"));
         for (uint8_t i = 0; i < uidLength; i++) {
             Serial.print(" 0x");
             Serial.print(uid[i], HEX);
@@ -95,19 +104,24 @@ void accessServiceLoop() {
         Serial.println("");
         bool validUID = rfid.validateUID(uid, uidLength);
         if (uidLength == 4) {
-            Serial.println("4B UID");
+            Serial.println(F("[ACCESS] 4B UID detected"));
         } else if (uidLength == 7) {
-            Serial.println("7B UID");
+            Serial.println(F("[ACCESS] 7B UID detected"));
         } else {
-            Serial.print(F("Unknown UID type / length"));
+            Serial.print(F("[ACCESS] Unknown UID type/length"));
         }
         if (validUID) {
-            Serial.print(F("Card match found!"));
+            Serial.print(F("[ACCESS] "));
+            Serial.print(millis());
+            Serial.println(F(": Valid card - activating relays"));
             invalidAttempts = 0;
             audio.playTrack(AudioPlayer::SOUND_ACCEPTED);
             activateRelays();
         } else {
-            Serial.print(F("Unauthorised card"));
+            Serial.print(F("[ACCESS] "));
+            Serial.print(millis());
+            Serial.println(F(": Invalid card - attempt #"));
+            Serial.print(invalidAttempts + 1);
             if (invalidAttempts == 0) {
                 audio.playTrack(AudioPlayer::SOUND_DENIED_1);
             } else if (invalidAttempts == 1) {

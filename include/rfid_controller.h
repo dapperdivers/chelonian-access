@@ -12,7 +12,7 @@
 class RFIDController {
 public:
     // ESP32-C3 SPI SS pin
-    RFIDController(uint8_t ss_pin = 5);
+    RFIDController(uint8_t ss_pin = 10);
     bool begin();
     bool readCard(uint8_t* uid, uint8_t* uidLength);
     bool validateUID(const uint8_t* uid, uint8_t uidLength);

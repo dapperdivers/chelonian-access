@@ -1,6 +1,7 @@
+#include "test_rfid_controller.h"  // Include the new header for test function declarations
+#include <rfid_controller.h>
+#include <test_helpers.h>
 #include <unity.h>
-#include "rfid_controller.h"
-#include "test_helpers.h"
 
 // Test fixture
 
@@ -70,7 +71,6 @@ void testRfidMaxUidLimit() {
 
     rfidFixture->rfid->addUID4B(uid1);
     rfidFixture->rfid->addUID4B(uid2);  // This should be ignored
-
     TEST_ASSERT_TRUE(rfidFixture->rfid->validateUID(uid1, 4));
     TEST_ASSERT_FALSE(rfidFixture->rfid->validateUID(uid2, 4));
 

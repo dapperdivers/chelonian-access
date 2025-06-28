@@ -1,21 +1,11 @@
+#include <test_helpers.h>  // Provides setUp() and tearDown()
 #include <unity.h>
-#include "test_helpers.h"
+#include "test_integration.h"  // Include the test function declarations
 
-// Declare test functions
-void testValidCardFlow();
-void testInvalidCardFlowFirstAttempt();
-void testInvalidCardFlowSecondAttempt();
-void testInvalidCardFlowThirdAttempt();
-void testExponentialBackoff();
-void testMaxInvalidAttempts();
-void testWaitingSoundAfter10Seconds();
-void testRelayTimingAccuracy();
-
-// setUp and tearDown are defined in test_helpers.cpp
-
-int main(int /*argc*/, char** /*argv*/) {
+int main(void) {
     UNITY_BEGIN();
 
+    // Run your test functions
     RUN_TEST(testValidCardFlow);
     RUN_TEST(testInvalidCardFlowFirstAttempt);
     RUN_TEST(testInvalidCardFlowSecondAttempt);
@@ -24,6 +14,7 @@ int main(int /*argc*/, char** /*argv*/) {
     RUN_TEST(testMaxInvalidAttempts);
     RUN_TEST(testWaitingSoundAfter10Seconds);
     RUN_TEST(testRelayTimingAccuracy);
+    RUN_TEST(testSequentialRelayActivation);
 
     return UNITY_END();
 }

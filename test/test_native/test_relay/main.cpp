@@ -1,20 +1,11 @@
+#include <test_helpers.h>  // Provides setUp() and tearDown()
 #include <unity.h>
-#include "test_helpers.h"
+#include "test_relay_controller.h"  // Include the test function declarations
 
-// Declare test functions
-void testRelayInitialState();
-void testSetSingleRelay();
-void testSetAllRelays();
-void testInvalidRelayNumber();
-void testRelayStateTransitions();
-void testRapidRelaySwitching();
-void testSequentialRelayOperations();
-
-// setUp and tearDown are defined in test_helpers.cpp
-
-int main(int /*argc*/, char** /*argv*/) {
+int main(void) {
     UNITY_BEGIN();
 
+    // Run your test functions
     RUN_TEST(testRelayInitialState);
     RUN_TEST(testSetSingleRelay);
     RUN_TEST(testSetAllRelays);

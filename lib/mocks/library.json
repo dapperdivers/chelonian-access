@@ -1,0 +1,13 @@
+{
+  "name": "mocks",
+  "version": "1.0.0",
+  "description": "Mocking Library for Chelonian Access project unit tests.",
+  "keywords": ["mocks", "testing"],
+  "authors": {
+    "name": "Chelonian Access Team",
+    "email": "team@chelonianaccess.com"
+  },
+  "license": "MIT",
+  "frameworks": "*",
+  "platforms": "*"
+}

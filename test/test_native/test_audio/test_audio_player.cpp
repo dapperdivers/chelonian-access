@@ -1,6 +1,7 @@
+#include "test_audio_player.h"  // Include the new header for test function declarations
+#include <audio_controller.h>
+#include <test_helpers.h>
 #include <unity.h>
-#include "audio_controller.h"
-#include "test_helpers.h"
 
 void testAudioInitialization() {
     TEST_ASSERT_TRUE(audioFixture->audio->begin());

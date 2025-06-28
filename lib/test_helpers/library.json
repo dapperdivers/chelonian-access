@@ -1,0 +1,13 @@
+{
+  "name": "test_helpers",
+  "version": "1.0.0",
+  "description": "Test Helper utilities for Chelonian Access project.",
+  "keywords": ["testing", "helpers"],
+  "authors": {
+    "name": "Chelonian Access Team",
+    "email": "team@chelonianaccess.com"
+  },
+  "license": "MIT",
+  "frameworks": "*",
+  "platforms": "*"
+}

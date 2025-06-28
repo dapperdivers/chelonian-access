@@ -1,18 +1,11 @@
+#include <test_helpers.h>  // Provides setUp() and tearDown()
 #include <unity.h>
-#include "test_helpers.h"
+#include "test_rfid_controller.h"  // Include the test function declarations
 
-// Declare test functions
-void testRfidInitialization();
-void testRfidDefaultUids();
-void testRfidAddUids();
-void testRfidInvalidUidLength();
-void testRfidMaxUidLimit();
-
-// setUp and tearDown are defined in test_helpers.cpp
-
-int main(int /*argc*/, char** /*argv*/) {
+int main(void) {
     UNITY_BEGIN();
 
+    // Run your test functions
     RUN_TEST(testRfidInitialization);
     RUN_TEST(testRfidDefaultUids);
     RUN_TEST(testRfidAddUids);

@@ -1,9 +1,10 @@
+#include "test_relay_controller.h"  // Include the new header for test function declarations
+#include <relay_controller.h>
+#include <test_helpers.h>
 #include <unity.h>
-#include "relay_controller.h"
-#include "test_helpers.h"
 
 void testRelayInitialState() {
-    ESP_LOGI("TEST", "Starting testRelayInitialState");
+    ESP_LOGE("TEST", "Starting testRelayInitialState");
     // Check pin modes are set to OUTPUT
     TEST_ASSERT_EQUAL(OUTPUT, mockPinModes[9]);   // Relay 1
     TEST_ASSERT_EQUAL(OUTPUT, mockPinModes[10]);  // Relay 2
@@ -24,7 +25,7 @@ void testRelayInitialState() {
 }
 
 void testSetSingleRelay() {
-    ESP_LOGI("TEST", "Starting testSetSingleRelay");
+    ESP_LOGE("TEST", "Starting testSetSingleRelay");
     relayFixture->relays->setRelay(0, true);
     TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(0));
     TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(1));
@@ -36,7 +37,7 @@ void testSetSingleRelay() {
 }
 
 void testSetAllRelays() {
-    ESP_LOGI("TEST", "Starting testSetAllRelays");
+    ESP_LOGE("TEST", "Starting testSetAllRelays");
     relayFixture->relays->setAllRelays(true);
     TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(0));
     TEST_ASSERT_TRUE(relayFixture->relays->getRelayState(1));
@@ -63,14 +64,14 @@ void testSetAllRelays() {
 }
 
 void testInvalidRelayNumber() {
-    ESP_LOGI("TEST", "Starting testInvalidRelayNumber");
+    ESP_LOGE("TEST", "Starting testInvalidRelayNumber");
     TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(4));
     relayFixture->relays->setRelay(4, true);
     TEST_ASSERT_FALSE(relayFixture->relays->getRelayState(4));
 }
 
 void testRelayStateTransitions() {
-    ESP_LOGI("TEST", "Starting testRelayStateTransitions");
+    ESP_LOGE("TEST", "Starting testRelayStateTransitions");
     // Clear history to start fresh
     resetMockState();
     relayFixture->relays->begin();
@@ -92,7 +93,7 @@ void testRelayStateTransitions() {
 }
 
 void testRapidRelaySwitching() {
-    ESP_LOGI("TEST", "Starting testRapidRelaySwitching");
+    ESP_LOGE("TEST", "Starting testRapidRelaySwitching");
     // Clear history to only count transitions from this test
     resetPinHistory();
 
@@ -108,7 +109,7 @@ void testRapidRelaySwitching() {
 }
 
 void testSequentialRelayOperations() {
-    ESP_LOGI("TEST", "Starting testSequentialRelayOperations");
+    ESP_LOGE("TEST", "Starting testSequentialRelayOperations");
     // Clear history to start fresh
     resetMockState();
     relayFixture->relays->begin();

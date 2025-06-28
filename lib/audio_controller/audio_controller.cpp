@@ -18,7 +18,7 @@ AudioPlayer::~AudioPlayer() {
 }
 
 bool AudioPlayer::begin() {
-    ESP_LOGI(TAG, "%lu - Initializing audio controller...", millis());
+    ESP_LOGE(TAG, "%lu - Initializing audio controller...", millis());
     if (audioSerial == nullptr) {
         audioSerial = new SoftwareSerial(m_rx_pin, m_tx_pin);
     }
@@ -39,7 +39,7 @@ bool AudioPlayer::begin() {
 
         audio_enabled = true;
         m_initialized = true;
-        ESP_LOGI(TAG, "%lu - Initialized successfully. Volume: %d, Source: %s", millis(),
+        ESP_LOGE(TAG, "%lu - Initialized successfully. Volume: %d, Source: %s", millis(),
                  m_current_volume, m_current_source == MP3_SRC_BUILTIN ? "Built-in" : "SD Card");
         return true;
     }
@@ -51,7 +51,7 @@ void AudioPlayer::setVolume(uint8_t volume) {
     if (!m_initialized) {
         return;
     }
-    ESP_LOGI(TAG, "%lu - Volume changing from %d to ", millis(), m_current_volume);
+    ESP_LOGE(TAG, "%lu - Volume changing from %d to ", millis(), m_current_volume);
 
     // Clamp volume between 0-30
     if (volume > 30) {
@@ -62,9 +62,9 @@ void AudioPlayer::setVolume(uint8_t volume) {
 
     if (audio_enabled) {
         player->setVolume(m_current_volume);
-        ESP_LOGI(TAG, "%d", m_current_volume);
+        ESP_LOGE(TAG, "%d", m_current_volume);
     } else {
-        ESP_LOGI(TAG, " (audio disabled)");
+        ESP_LOGE(TAG, " (audio disabled)");
     }
 }
 
@@ -72,7 +72,7 @@ void AudioPlayer::playTrack(uint8_t track) {
     if (!m_initialized) {
         return;
     }
-    ESP_LOGI(TAG, "%lu - Playing track %d", millis(), track);
+    ESP_LOGE(TAG, "%lu - Playing track %d", millis(), track);
 
     if (audio_enabled) {
         player->playFileByIndexNumber(track);
@@ -82,7 +82,7 @@ void AudioPlayer::playTrack(uint8_t track) {
 
 void AudioPlayer::reset() {
     if (player != nullptr) {
-        ESP_LOGI(TAG, "%lu - Resetting audio player", millis());
+        ESP_LOGE(TAG, "%lu - Resetting audio player", millis());
         player->reset();
     }
 }

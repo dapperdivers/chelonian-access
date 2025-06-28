@@ -30,13 +30,13 @@ Use these macros based on message severity:
 |--------------|--------|--------------------------------------|
 | `ESP_LOGE()` | Error  | Critical errors that need attention  |
 | `ESP_LOGW()` | Warn   | Potential issues                     |
-| `ESP_LOGI()` | Info   | Normal operational messages          |
+| `ESP_LOGE()` | Info   | Normal operational messages          |
 | `ESP_LOGD()` | Debug  | Debug information                    |
 | `ESP_LOGV()` | Verbose| Very detailed tracing                |
 
 Example:
 ```cpp
-ESP_LOGI(TAG, "System initialized. Free heap: %d bytes", esp_get_free_heap_size());
+ESP_LOGE(TAG, "System initialized. Free heap: %d bytes", esp_get_free_heap_size());
 ```
 
 ## Configuration

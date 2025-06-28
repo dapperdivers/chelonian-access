@@ -1,9 +1,7 @@
-#ifndef UNIT_TEST
-
 #include <Arduino.h>
+#include <access_service.h>
 #include <cstdlib>
 #include <exception>
-#include "access_service.h"
 #include "esp_log.h"
 
 static const char* TAG = "Main";
@@ -37,14 +35,18 @@ void setup() {
     std::set_terminate(globalExceptionHandler);
 
     Serial.begin(115200);
-    delay(2000);
-    ESP_LOGI(TAG, "Chelonian Access Service");
-    ESP_LOGI(TAG, "Version 1.0.0");
-    ESP_LOGI(TAG, "Copyright (C) 2023 Derek Molloy");
-    ESP_LOGI(TAG, "Licensed under the MIT License");
-    ESP_LOGI(TAG, "Starting up!");
+    esp_log_level_set("*", ESP_LOG_VERBOSE);  // Explicitly set log level for all tags to VERBOSE
+    esp_log_level_set(TAG, ESP_LOG_VERBOSE);  // Explicitly set log level for "Main" tag
+    delay(1000);
+
+    ESP_LOGE(TAG, "Chelonian Access Service");
+    ESP_LOGE(TAG, "Version 1.0.0");
+    ESP_LOGE(TAG, "Copyright (C) 2023 Derek Molloy");
+    ESP_LOGE(TAG, "Licensed under the MIT License");
+    ESP_LOGE(TAG, "Starting up!");
 
     // Call the setup function for the access service
+    delay(1000);
     accessServiceSetup();
 }
 
@@ -52,4 +54,3 @@ void loop() {
     // Call the main service loop
     accessServiceLoop();
 }
-#endif

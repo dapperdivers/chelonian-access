@@ -1,0 +1,13 @@
+{
+  "name": "access_service",
+  "version": "1.0.0",
+  "description": "Access Service Library for Chelonian Access project.",
+  "keywords": ["access", "security"],
+  "authors": {
+    "name": "Chelonian Access Team",
+    "email": "team@chelonianaccess.com"
+  },
+  "license": "MIT",
+  "frameworks": "*",
+  "platforms": "*"
+}

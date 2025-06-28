@@ -25,14 +25,15 @@ RFIDController::~RFIDController() {
 
 bool RFIDController::begin() {
     m_nfc->begin();  // Call begin, which returns void
-    ESP_LOGI(TAG, "Initializing PN532...");
+    ESP_LOGE(TAG, "Initializing PN532...");
 
+    delay(1000);  // Wait for the PN532 to initialize
     uint32_t versiondata = m_nfc->getFirmwareVersion();
     if (versiondata == 0) {
         ESP_LOGE(TAG, "Failed to initialize PN532!");
         return false;
     }
-    ESP_LOGI(TAG, "PN532 initialized successfully!");
+    ESP_LOGE(TAG, "PN532 initialized successfully!");
 
     // Configure board to read RFID tags
     m_nfc->SAMConfig();
@@ -42,7 +43,7 @@ bool RFIDController::begin() {
 bool RFIDController::readCard(uint8_t* uid, uint8_t* uidLength) {
     bool result = m_nfc->readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, uidLength);
     if (result) {
-        ESP_LOGI(TAG, "%lu ms - Card detected: UID=", millis());
+        ESP_LOGE(TAG, "%lu ms - Card detected: UID=", millis());
         char uidStr[50] = "";
         for (uint8_t i = 0; i < *uidLength; i++) {
             char hexBuf[5];
@@ -50,15 +51,15 @@ bool RFIDController::readCard(uint8_t* uid, uint8_t* uidLength) {
             strcat(uidStr, hexBuf);
         }
         uidStr[strlen(uidStr) - 1] = '\0';  // Remove last colon
-        ESP_LOGI(TAG, "%s", uidStr);
+        ESP_LOGE(TAG, "%s", uidStr);
     } else {
-        ESP_LOGI(TAG, "No card detected");
+        ESP_LOGE(TAG, "No card detected");
     }
     return result;
 }
 
 bool RFIDController::validateUID(const uint8_t* uid, uint8_t uidLength) {
-    ESP_LOGI(TAG, "%lu ms - Validating UID=", millis());
+    ESP_LOGE(TAG, "%lu ms - Validating UID=", millis());
     char uidStrValidate[50] = "";
     for (uint8_t i = 0; i < uidLength; i++) {
         char hexBuf[5];
@@ -66,19 +67,19 @@ bool RFIDController::validateUID(const uint8_t* uid, uint8_t uidLength) {
         strcat(uidStrValidate, hexBuf);
     }
     uidStrValidate[strlen(uidStrValidate) - 1] = '\0';  // Remove last colon
-    ESP_LOGI(TAG, "%s", uidStrValidate);
+    ESP_LOGE(TAG, "%s", uidStrValidate);
 
     if (uidLength == 4) {
         for (uint8_t i = 0; i < m_num4BUIDs; i++) {
             if (compare4BUID(m_uids4B[i].data(), uid)) {
-                ESP_LOGI(TAG, " - Authentication successful (4B)");
+                ESP_LOGE(TAG, " - Authentication successful (4B)");
                 return true;
             }
         }
     } else if (uidLength == 7) {
         for (uint8_t i = 0; i < m_num7BUIDs; i++) {
             if (compare7BUID(m_uids7B[i].data(), uid)) {
-                ESP_LOGI(TAG, " - Authentication successful (7B)");
+                ESP_LOGE(TAG, " - Authentication successful (7B)");
                 return true;
             }
         }
@@ -112,9 +113,9 @@ uint32_t RFIDController::getFirmwareVersion() {
 void RFIDController::printFirmwareVersion() {
     uint32_t versiondata = getFirmwareVersion();
     if (versiondata != 0u) {
-        ESP_LOGI(TAG, "Found chip PN5");
-        ESP_LOGI(TAG, "%02X", (versiondata >> 24) & 0xFF);  // Log the value
-        ESP_LOGI(TAG, "Firmware ver. %u.%u", (versiondata >> 16) & 0xFF, (versiondata >> 8) & 0xFF);
+        ESP_LOGE(TAG, "Found chip PN5");
+        ESP_LOGE(TAG, "%02X", (versiondata >> 24) & 0xFF);  // Log the value
+        ESP_LOGE(TAG, "Firmware ver. %u.%u", (versiondata >> 16) & 0xFF, (versiondata >> 8) & 0xFF);
     }
 }
 

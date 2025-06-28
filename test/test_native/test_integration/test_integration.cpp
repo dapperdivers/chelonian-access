@@ -1,5 +1,6 @@
+#include "test_integration.h"  // Include the new header for test function declarations
+#include <test_helpers.h>
 #include <unity.h>
-#include "test_helpers.h"
 
 // Integration test constants for ESP32-C3 + JQ6500 hardware
 // These tests simulate the business logic of the RFID access control system
@@ -22,7 +23,7 @@ const uint8_t INVALID_DELAYS[MAXIMUM_INVALID_ATTEMPTS] = {1,  3,  4,  5,  8,  12
 // Track 6 = SOUND_DENIED_3
 
 void testValidCardFlow() {
-    ESP_LOGI("TEST", "Starting testValidCardFlow");
+    ESP_LOGE("TEST", "Starting testValidCardFlow");
     // Simulate valid card scan
     // Expected: Play acceptance sound (track 3)
     integrationFixture->state.lastPlayedTrack = 3;
@@ -62,7 +63,7 @@ void testValidCardFlow() {
 }
 
 void testInvalidCardFlowFirstAttempt() {
-    ESP_LOGI("TEST", "Starting testInvalidCardFlowFirstAttempt");
+    ESP_LOGE("TEST", "Starting testInvalidCardFlowFirstAttempt");
     // Ensure relays are off at the start (HIGH = off due to active LOW logic)
     digitalWrite(9, HIGH);
     digitalWrite(10, HIGH);
@@ -88,7 +89,7 @@ void testInvalidCardFlowFirstAttempt() {
 }
 
 void testInvalidCardFlowSecondAttempt() {
-    ESP_LOGI("TEST", "Starting testInvalidCardFlowSecondAttempt");
+    ESP_LOGE("TEST", "Starting testInvalidCardFlowSecondAttempt");
     // Second invalid attempt
     integrationFixture->state.invalidAttempts = 1;
 
@@ -106,7 +107,7 @@ void testInvalidCardFlowSecondAttempt() {
 }
 
 void testInvalidCardFlowThirdAttempt() {
-    ESP_LOGI("TEST", "Starting testInvalidCardFlowThirdAttempt");
+    ESP_LOGE("TEST", "Starting testInvalidCardFlowThirdAttempt");
     // Third invalid attempt
     integrationFixture->state.invalidAttempts = 2;
 
@@ -124,7 +125,7 @@ void testInvalidCardFlowThirdAttempt() {
 }
 
 void testExponentialBackoff() {
-    ESP_LOGI("TEST", "Starting testExponentialBackoff");
+    ESP_LOGE("TEST", "Starting testExponentialBackoff");
     // Test exponential backoff delays
     for (uint8_t i = 0; i < 5; i++) {
         resetMockState();
@@ -138,7 +139,7 @@ void testExponentialBackoff() {
 }
 
 void testMaxInvalidAttempts() {
-    ESP_LOGI("TEST", "Starting testMaxInvalidAttempts");
+    ESP_LOGE("TEST", "Starting testMaxInvalidAttempts");
     // Test that invalid attempts don't exceed maximum
     integrationFixture->state.invalidAttempts = MAXIMUM_INVALID_ATTEMPTS - 1;
 
@@ -151,7 +152,7 @@ void testMaxInvalidAttempts() {
 }
 
 void testWaitingSoundAfter10Seconds() {
-    ESP_LOGI("TEST", "Starting testWaitingSoundAfter10Seconds");
+    ESP_LOGE("TEST", "Starting testWaitingSoundAfter10Seconds");
     // Advance time to 10 seconds
     advanceMockTime(10001);
 
@@ -168,7 +169,7 @@ void testWaitingSoundAfter10Seconds() {
 }
 
 void testRelayTimingAccuracy() {
-    ESP_LOGI("TEST", "Starting testRelayTimingAccuracy");
+    ESP_LOGE("TEST", "Starting testRelayTimingAccuracy");
     // Test sequential relay activation timing
     resetMockState();
 
@@ -201,7 +202,7 @@ void testRelayTimingAccuracy() {
 }
 
 void testSequentialRelayActivation() {
-    ESP_LOGI("TEST", "Starting testSequentialRelayActivation");
+    ESP_LOGE("TEST", "Starting testSequentialRelayActivation");
     // Test the complete sequential relay activation pattern
     resetMockState();
 

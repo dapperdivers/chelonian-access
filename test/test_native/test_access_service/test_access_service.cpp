@@ -1,5 +1,6 @@
 #include "test_access_service.h"  // Include the new header for test function declarations
 #include <access_service.h>
+#include <esp_log.h>
 #include <test_helpers.h>
 #include <unity.h>
 

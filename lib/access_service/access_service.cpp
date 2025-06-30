@@ -1,18 +1,13 @@
 #include "access_service.h"
 
-#ifdef UNIT_TEST
-#include "mock_arduino.h"
-#include "mock_esp_log.h"
-#else
 #include <Arduino.h>
 #include "esp_log.h"
-#endif
 
 static const char* TAG = "ACCESS";  // Add TAG definition
 // Instantiate controllers
 RFIDController rfid;
 RelayController relays;
-AudioPlayer audio;
+AudioContoller audio;
 
 // State variables
 enum RelayState currentRelayState = RELAY_IDLE;
@@ -30,7 +25,6 @@ void accessServiceSetup() {
         ESP_LOGE(TAG, "RFID controller initialized successfully");
     } else {
         ESP_LOGE(TAG, "Failed to initialize RFID controller");
-        return;
     }
 
     rfid.printFirmwareVersion();
@@ -41,7 +35,7 @@ void accessServiceSetup() {
     if (audio.begin()) {
         audio.setVolume(20);
         delay(500);
-        audio.playTrack(AudioPlayer::SOUND_STARTUP);
+        audio.playTrack(AudioContoller::SOUND_STARTUP);
     }
     ESP_LOGE(TAG, "Waiting for an ISO14443A card");
 }
@@ -84,7 +78,7 @@ void accessServiceLoop() {
     uint8_t uidLength;
     handleRelaySequence();
     if (millis() > 10000 && !impatient && !scanned) {
-        audio.playTrack(AudioPlayer::SOUND_WAITING);
+        audio.playTrack(AudioContoller::SOUND_WAITING);
         impatient = true;
     }
     success = rfid.readCard(uid, &uidLength);
@@ -112,16 +106,16 @@ void accessServiceLoop() {
         if (validUID) {
             ESP_LOGE(TAG, "Valid card - activating relays");
             invalidAttempts = 0;
-            audio.playTrack(AudioPlayer::SOUND_ACCEPTED);
+            audio.playTrack(AudioContoller::SOUND_ACCEPTED);
             activateRelays();
         } else {
             ESP_LOGW(TAG, "Invalid card - attempt #%u", invalidAttempts + 1);
             if (invalidAttempts == 0) {
-                audio.playTrack(AudioPlayer::SOUND_DENIED_1);
+                audio.playTrack(AudioContoller::SOUND_DENIED_1);
             } else if (invalidAttempts == 1) {
-                audio.playTrack(AudioPlayer::SOUND_DENIED_2);
+                audio.playTrack(AudioContoller::SOUND_DENIED_2);
             } else {
-                audio.playTrack(AudioPlayer::SOUND_DENIED_3);
+                audio.playTrack(AudioContoller::SOUND_DENIED_3);
             }
             delay(3000);
             delay(invalidDelays[invalidAttempts] * 1000);

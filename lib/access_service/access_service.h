@@ -8,7 +8,7 @@
 // State and configuration
 extern RFIDController rfid;
 extern RelayController relays;
-extern AudioPlayer audio;
+extern AudioContoller audio;
 
 extern uint8_t invalidAttempts;
 extern bool scanned;

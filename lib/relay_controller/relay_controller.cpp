@@ -1,10 +1,5 @@
 #include "relay_controller.h"
-
-#ifdef UNIT_TEST
-#include "mock_esp_log.h"  // Add ESP_LOGX header
-#else
 #include "esp_log.h"
-#endif
 
 static const char* TAG = "RELAY";  // Add TAG definition
 RelayController::RelayController(uint8_t relay1_pin, uint8_t relay2_pin, uint8_t relay3_pin,

@@ -1,43 +1,39 @@
 #include "audio_controller.h"
 
-#ifdef UNIT_TEST
-#include "mock_arduino.h"
-#include "mock_esp_log.h"
-#else
 #include <Arduino.h>
 #include "esp_log.h"
-#endif
 
 static const char* TAG = "Audio";
 
-AudioPlayer::AudioPlayer(uint8_t rx_pin, uint8_t tx_pin) : m_rx_pin(rx_pin), m_tx_pin(tx_pin) {}
+AudioContoller::AudioContoller(uint8_t rx_pin, uint8_t tx_pin)
+    : m_rx_pin(rx_pin), m_tx_pin(tx_pin) {}
 
-AudioPlayer::~AudioPlayer() {
-    delete audioSerial;
+AudioContoller::~AudioContoller() {
     delete player;
 }
 
-bool AudioPlayer::begin() {
+bool AudioContoller::begin() {
+    delay(100);  // Small delay to ensure module is ready for serial communication
     ESP_LOGE(TAG, "%lu - Initializing audio controller...", millis());
-    if (audioSerial == nullptr) {
-        audioSerial = new SoftwareSerial(m_rx_pin, m_tx_pin);
-    }
-    audioSerial->begin(9600);  // Only pass baud for SoftwareSerial
     if (player == nullptr) {
         player = new JQ6500_Serial(m_rx_pin, m_tx_pin);
+        ESP_LOGE(TAG, "%lu - Created JQ6500_Serial on RX: %d, TX: %d", millis(), m_rx_pin,
+                 m_tx_pin);
     }
+    player->begin(9600);
 
     if (player != nullptr) {
-        reset();  // Reset JQ6500 on startup
-        delay(500);
-
         // Ensure we're using built-in flash memory (not SD card)
         setSource(MP3_SRC_BUILTIN);
-        delay(100);
+        delay(2000);  // Increased delay after setting source
 
         player->setVolume(m_current_volume);
 
         audio_enabled = true;
+        // lets print the status here
+        uint8_t status = player->getStatus();
+        ESP_LOGE(TAG, "%lu - JQ6500 status: %d", millis(), status);
+
         m_initialized = true;
         ESP_LOGE(TAG, "%lu - Initialized successfully. Volume: %d, Source: %s", millis(),
                  m_current_volume, m_current_source == MP3_SRC_BUILTIN ? "Built-in" : "SD Card");
@@ -47,7 +43,7 @@ bool AudioPlayer::begin() {
     return false;
 }
 
-void AudioPlayer::setVolume(uint8_t volume) {
+void AudioContoller::setVolume(uint8_t volume) {
     if (!m_initialized) {
         return;
     }
@@ -62,32 +58,38 @@ void AudioPlayer::setVolume(uint8_t volume) {
 
     if (audio_enabled) {
         player->setVolume(m_current_volume);
-        ESP_LOGE(TAG, "%d", m_current_volume);
     } else {
         ESP_LOGE(TAG, " (audio disabled)");
     }
 }
 
-void AudioPlayer::playTrack(uint8_t track) {
+void AudioContoller::playTrack(uint8_t track) {
     if (!m_initialized) {
         return;
     }
     ESP_LOGE(TAG, "%lu - Playing track %d", millis(), track);
 
     if (audio_enabled) {
+        // Ensure track is within valid range (0-99)
+        if (track > 99) {
+            ESP_LOGE(TAG, "Track number %d is out of range (0-99)", track);
+            return;
+        }
+        // Play the track using JQ6500
         player->playFileByIndexNumber(track);
+        ESP_LOGE(TAG, "Track %d started", track);
         m_last_played_track = track;
     }
 }
 
-void AudioPlayer::reset() {
+void AudioContoller::reset() {
     if (player != nullptr) {
         ESP_LOGE(TAG, "%lu - Resetting audio player", millis());
         player->reset();
     }
 }
 
-uint8_t AudioPlayer::getStatus() const {
+uint8_t AudioContoller::getStatus() const {
     if (!m_initialized || !audio_enabled) {
         return MP3_STATUS_STOPPED;
     }
@@ -96,7 +98,7 @@ uint8_t AudioPlayer::getStatus() const {
     return status;
 }
 
-uint8_t AudioPlayer::getVolume() const {
+uint8_t AudioContoller::getVolume() const {
     if (!m_initialized || !audio_enabled) {
         return 0;
     }
@@ -105,7 +107,7 @@ uint8_t AudioPlayer::getVolume() const {
     return m_current_volume;
 }
 
-uint16_t AudioPlayer::getCurrentPosition() const {
+uint16_t AudioContoller::getCurrentPosition() const {
     if (!m_initialized || !audio_enabled) {
         return 0;
     }
@@ -113,7 +115,7 @@ uint16_t AudioPlayer::getCurrentPosition() const {
     return player->currentFilePositionInSeconds();
 }
 
-void AudioPlayer::setSource(uint8_t source) {
+void AudioContoller::setSource(uint8_t source) {
     if (!m_initialized || !audio_enabled) {
         return;
     }
@@ -125,17 +127,17 @@ void AudioPlayer::setSource(uint8_t source) {
     }
 }
 
-uint8_t AudioPlayer::getSource() const {
+uint8_t AudioContoller::getSource() const {
     // Return our cached source value since JQ6500 doesn't provide a getSource method
     return m_current_source;
 }
 
-uint8_t AudioPlayer::getLastPlayedTrack() const {
+uint8_t AudioContoller::getLastPlayedTrack() const {
     return m_last_played_track;
 }
 
 #ifdef UNIT_TEST
-void AudioPlayer::setPosition(uint16_t seconds) {
+void AudioContoller::setPosition(uint16_t seconds) {
     if (!m_initialized || !audio_enabled) {
         return;
     }

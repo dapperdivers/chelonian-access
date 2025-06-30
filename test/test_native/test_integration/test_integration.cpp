@@ -1,4 +1,5 @@
 #include "test_integration.h"  // Include the new header for test function declarations
+#include <esp_log.h>
 #include <test_helpers.h>
 #include <unity.h>
 

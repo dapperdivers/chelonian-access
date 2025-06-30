@@ -1,6 +1,6 @@
 #include "test_helpers.h"
-#include <mock_arduino.h>
 #include <unity.h>
+#include "mock_arduino.h"
 
 // Global variable to track total delay time
 extern millis_t mock_delay_time;

@@ -2,20 +2,14 @@
 #include <array>
 #include <cstring>
 
-#ifdef UNIT_TEST
-#include "mock_arduino.h"
-#include "mock_esp_log.h"  // Add ESP_LOGX header
-#include "mock_pn532.h"
-#else
 #include <Adafruit_PN532.h>
 #include <Arduino.h>
 #include "esp_log.h"
-#endif
 
 static const char* TAG = "RFID";  // Add TAG definition
 
-RFIDController::RFIDController(uint8_t ss_pin)
-    : m_ss_pin(ss_pin), m_nfc(new Adafruit_PN532(m_ss_pin)) {
+RFIDController::RFIDController(uint8_t clk, uint8_t miso, uint8_t mosi, uint8_t ss)
+    : m_nfc(new Adafruit_PN532(clk, miso, mosi, ss)) {
     // Using SPI interface with Adafruit_PN532
 }
 
@@ -24,16 +18,33 @@ RFIDController::~RFIDController() {
 }
 
 bool RFIDController::begin() {
-    m_nfc->begin();  // Call begin, which returns void
-    ESP_LOGE(TAG, "Initializing PN532...");
+    if (!m_nfc->begin()) {  // Check if begin was successful
+        ESP_LOGE(TAG, "PN532 initialization failed!");
+        return false;
+    } else {
+        ESP_LOGE(TAG, "PN532 initialized successfully");
+    }
 
-    delay(1000);  // Wait for the PN532 to initialize
+    // Set SCK pin drive strength to be faster (assuming default SCK is GPIO5 for ESP32C3)
+    // This is a workaround for STM32F40x/F41x silicon limitation, might help with ESP32C3 as well
+    // gpio_set_drive_capability(GPIO_NUM_4, GPIO_DRIVE_CAP_3);
+
     uint32_t versiondata = m_nfc->getFirmwareVersion();
+    if (!versiondata) {
+        // Try to reset the PN532
+        m_nfc->reset();
+        // Wait a bit for the reset to take effect
+        delay(100);
+        versiondata = m_nfc->getFirmwareVersion();
+        ESP_LOGE(TAG, "Firmware Version after reset: %X", versiondata);
+    }
+
     if (versiondata == 0) {
-        ESP_LOGE(TAG, "Failed to initialize PN532!");
+        ESP_LOGE(TAG, "Didn't find PN532 board or get firmware version failed!");
         return false;
     }
-    ESP_LOGE(TAG, "PN532 initialized successfully!");
+
+    ESP_LOGE(TAG, "PN532 initialized successfully. Firmware Version: %X", versiondata);
 
     // Configure board to read RFID tags
     m_nfc->SAMConfig();
@@ -124,10 +135,12 @@ void RFIDController::initializeDefaultUIDs() {
     std::array<uint8_t, 4> testUID4B = {0xB4, 0x12, 0x34, 0x56};
     std::array<uint8_t, 7> testUiD7B1 = {0x04, 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC};
     std::array<uint8_t, 7> testUiD7B2 = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD};
+    std::array<uint8_t, 7> testUiD7B3 = {0x04, 0x4A, 0x8C, 0x32, 0x0A, 0x54, 0x80};
 
     addUID4B(testUID4B.data());
     addUID7B(testUiD7B1.data());
     addUID7B(testUiD7B2.data());
+    addUID7B(testUiD7B3.data());
 }
 
 bool RFIDController::compare4BUID(const uint8_t* uid1, const uint8_t* uid2) {

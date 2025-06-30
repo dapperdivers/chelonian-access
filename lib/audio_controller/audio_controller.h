@@ -1,16 +1,9 @@
 #pragma once
 
-#ifdef UNIT_TEST
-#include "mock_arduino.h"
-#ifdef USINGMP3
-#include "mock_jq6500.h"
-#endif
-#else
 #include <Arduino.h>
 #include <SoftwareSerial.h>  // For SoftwareSerial on ESP32-C3
 #ifdef USINGMP3
 #include <JQ6500_Serial.h>
-#endif
 #endif
 
 // JQ6500 Status constants
@@ -22,10 +15,10 @@
 #define MP3_SRC_BUILTIN 4
 #define MP3_SRC_SDCARD 1
 
-class AudioPlayer {
+class AudioContoller {
 public:
-    AudioPlayer(uint8_t rx_pin = 0, uint8_t tx_pin = 1);  // ESP32-C3 Serial1 pins
-    ~AudioPlayer();                                       // Add destructor
+    AudioContoller(uint8_t rx_pin = 20, uint8_t tx_pin = 21);  // ESP32-C3 Serial1 pins
+    ~AudioContoller();                                         // Add destructor
 
     bool begin();
     void setVolume(uint8_t volume);
@@ -54,7 +47,6 @@ public:
     static constexpr uint8_t SOUND_DENIED_3 = 6;
 
 private:
-    SoftwareSerial* audioSerial = nullptr;
     bool m_initialized{false};
     uint8_t m_current_volume{20};
     uint8_t m_rx_pin;

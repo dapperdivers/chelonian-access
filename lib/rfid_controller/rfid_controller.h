@@ -1,18 +1,20 @@
 #pragma once
 #include <array>
 
-#ifdef UNIT_TEST
-#include "mock_arduino.h"
-#include "mock_pn532.h"  // Mock PN532 for unit testing
-#else
 #include <Adafruit_PN532.h>
 #include <Arduino.h>
-#endif
 
 class RFIDController {
 public:
-    // ESP32-C3 SPI SS pin
-    RFIDController(uint8_t ss_pin = 10);
+// ESP32-C3 SPI pins
+#define PN532_SCK (4)
+#define PN532_MISO (5)
+#define PN532_MOSI (6)
+#define PN532_SS (7)
+
+    RFIDController(uint8_t clk = PN532_SCK, uint8_t miso = PN532_MISO, uint8_t mosi = PN532_MOSI,
+                   uint8_t ss = PN532_SS);
+    ~RFIDController();
     bool begin();
     bool readCard(uint8_t* uid, uint8_t* uidLength);
     bool validateUID(const uint8_t* uid, uint8_t uidLength);
@@ -25,7 +27,6 @@ public:
 private:
     static constexpr uint8_t MAX_4B_UIDS = 1;
     static constexpr uint8_t MAX_7B_UIDS = 2;
-    uint8_t m_ss_pin;
     Adafruit_PN532* m_nfc;  // Using SPI interface
 
     std::array<std::array<uint8_t, 4>, MAX_4B_UIDS> m_uids4B{};

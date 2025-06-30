@@ -1,18 +1,18 @@
 #ifndef TEST_HELPERS_H
 #define TEST_HELPERS_H
 
+#include <Arduino.h>
 #include <unity.h>
 #include "audio_controller.h"
-#include "mock_arduino.h"
 #include "relay_controller.h"
 #include "rfid_controller.h"
 
 // Test fixtures
 class AudioTestFixture {
 public:
-    AudioPlayer* audio;
+    AudioContoller* audio;
 
-    AudioTestFixture() : audio(new AudioPlayer(8, 7)) {}
+    AudioTestFixture() : audio(new AudioContoller(8, 7)) {}
 
     ~AudioTestFixture() {
         delete audio;
@@ -23,7 +23,14 @@ class RelayTestFixture {
 public:
     RelayController* relays;
 
-    RelayTestFixture() : relays(new RelayController()) {
+    // Define the specific pins used for testing
+    static constexpr uint8_t RELAY_PIN_1 = 9;
+    static constexpr uint8_t RELAY_PIN_2 = 10;
+    static constexpr uint8_t RELAY_PIN_3 = 20;
+    static constexpr uint8_t RELAY_PIN_4 = 21;
+
+    RelayTestFixture()
+        : relays(new RelayController(RELAY_PIN_1, RELAY_PIN_2, RELAY_PIN_3, RELAY_PIN_4)) {
         relays->begin();
     }
 

@@ -1,0 +1,13 @@
+{
+  "name": "relay_controller",
+  "version": "1.0.0",
+  "description": "Relay Controller Library for Chelonian Access project.",
+  "keywords": ["relay", "control"],
+  "authors": {
+    "name": "Chelonian Access Team",
+    "email": "team@chelonianaccess.com"
+  },
+  "license": "MIT",
+  "frameworks": "*",
+  "platforms": "*"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "rfid_controller",
+  "version": "1.0.0",
+  "description": "RFID Controller Library for Chelonian Access project.",
+  "keywords": ["RFID", "PN532"],
+  "authors": {
+    "name": "Chelonian Access Team",
+    "email": "team@chelonianaccess.com"
+  },
+  "license": "MIT",
+  "frameworks": "*",
+  "platforms": "*"
+}

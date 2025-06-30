@@ -24,6 +24,12 @@ public:
         m_tx = tx;
     }
 
+    void begin(unsigned long baud) {
+        m_baud_rate = baud;
+        // Mock begin functionality, e.g., set initialized flag
+        m_initialized = true;
+    }
+
     void reset() {
         // Mock reset functionality
         m_is_playing = false;
@@ -91,4 +97,6 @@ private:
     uint8_t m_status{MP3_STATUS_STOPPED};
     uint8_t m_source{MP3_SRC_BUILTIN};
     uint16_t m_position_seconds{0};
+    unsigned long m_baud_rate{0};
+    bool m_initialized{false};
 };

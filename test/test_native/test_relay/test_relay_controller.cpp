@@ -1,6 +1,8 @@
+#include "test_relay_controller.h"  // Include the new header for test function declarations
+#include <esp_log.h>
+#include <relay_controller.h>
+#include <test_helpers.h>
 #include <unity.h>
-#include "relay_controller.h"
-#include "test_helpers.h"
 
 void testRelayInitialState() {
     // Check pin modes are set to OUTPUT
@@ -87,6 +89,7 @@ void testRelayStateTransitions() {
 }
 
 void testRapidRelaySwitching() {
+    ESP_LOGE("TEST", "Starting testRapidRelaySwitching");
     // Clear history to only count transitions from this test
     resetPinHistory();
 

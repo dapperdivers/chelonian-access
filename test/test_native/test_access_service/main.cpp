@@ -1,17 +1,11 @@
+#include <test_helpers.h>  // Provides setUp() and tearDown()
 #include <unity.h>
-#include "access_service.h"
-#include "test_helpers.h"
+#include "test_access_service.h"  // Include the test function declarations
 
-// Declare test functions
-void testInitialState();
-void testActivateRelays();
-void testRelaySequence();
-void testImpatientWaiting();
-void testInvalidCardDelays();
-
-int main(int /*argc*/, char** /*argv*/) {
+int main(void) {
     UNITY_BEGIN();
 
+    // Run your test functions
     RUN_TEST(testInitialState);
     RUN_TEST(testActivateRelays);
     RUN_TEST(testRelaySequence);

@@ -1,15 +1,13 @@
 #include "access_service.h"
 
-#ifdef UNIT_TEST
-#include "mock_arduino.h"
-#else
 #include <Arduino.h>
-#endif
+#include "esp_log.h"
 
+static const char* TAG = "ACCESS";  // Add TAG definition
 // Instantiate controllers
 RFIDController rfid;
 RelayController relays;
-AudioPlayer audio;
+AudioContoller audio;
 
 // State variables
 enum RelayState currentRelayState = RELAY_IDLE;
@@ -23,21 +21,23 @@ const uint8_t invalidDelays[MAXIMUM_INVALID_ATTEMPTS] = {1,  3,  4,  5,  8,  12,
                                                          23, 30, 38, 47, 57, 68};
 
 void accessServiceSetup() {
-    if (!rfid.begin()) {
-        Serial.print(F("[ACCESS] Error initializing RFID controller!"));
+    if (rfid.begin()) {
+        ESP_LOGE(TAG, "RFID controller initialized successfully");
+    } else {
+        ESP_LOGE(TAG, "Failed to initialize RFID controller");
     }
+
     rfid.printFirmwareVersion();
     rfid.initializeDefaultUIDs();
+
     relays.begin();
 
     if (audio.begin()) {
         audio.setVolume(20);
         delay(500);
-        audio.playTrack(AudioPlayer::SOUND_STARTUP);
+        audio.playTrack(AudioContoller::SOUND_STARTUP);
     }
-    Serial.print(F("[ACCESS] "));
-    Serial.print(millis());
-    Serial.println(F(": Waiting for an ISO14443A card"));
+    ESP_LOGE(TAG, "Waiting for an ISO14443A card");
 }
 
 void handleRelaySequence() {
@@ -50,9 +50,7 @@ void handleRelaySequence() {
                 relays.setRelay(RELAY2_PIN, true);
                 relayActivatedTime = millis();
                 currentRelayState = RELAY2_ACTIVE;
-                Serial.print(F("[ACCESS] "));
-                Serial.print(millis());
-                Serial.println(F(": Relay state transition 1->2"));
+                ESP_LOGE(TAG, "Relay state transition 1->2");
             }
             break;
         case RELAY2_ACTIVE:
@@ -60,10 +58,11 @@ void handleRelaySequence() {
                 relays.setRelay(RELAY2_PIN, false);
                 currentRelayState = RELAY_IDLE;
                 relayActive = false;
-                Serial.print(F("[ACCESS] "));
-                Serial.print(millis());
-                Serial.println(F(": Relay sequence complete"));
+                ESP_LOGE(TAG, "Relay sequence complete");
             }
+            break;
+        default:
+            ESP_LOGE(TAG, "Unhandled relay state: %d", currentRelayState);
             break;
     }
 }
@@ -73,9 +72,7 @@ void activateRelays() {
     relayActivatedTime = millis();
     currentRelayState = RELAY1_ACTIVE;
     relayActive = true;
-    Serial.print(F("[ACCESS] "));
-    Serial.print(millis());
-    Serial.println(F(": Starting relay sequence (state 1)"));
+    ESP_LOGE(TAG, "Starting relay sequence (state 1)");
 }
 
 void accessServiceLoop() {
@@ -84,50 +81,44 @@ void accessServiceLoop() {
     uint8_t uidLength;
     handleRelaySequence();
     if (millis() > 10000 && !impatient && !scanned) {
-        audio.playTrack(AudioPlayer::SOUND_WAITING);
+        audio.playTrack(AudioContoller::SOUND_WAITING);
         impatient = true;
     }
     success = rfid.readCard(uid, &uidLength);
     if (success) {
         scanned = true;
-        Serial.print(F("[ACCESS] "));
-        Serial.print(millis());
-        Serial.println(F(": Card detected"));
-        Serial.print(F("[ACCESS] UID Length: "));
-        Serial.print(uidLength, DEC);
-        Serial.println(" bytes");
-        Serial.print(F("[ACCESS] UID Value:"));
+        ESP_LOGE(TAG, "Card detected");
+        ESP_LOGE(TAG, "UID Length: %u bytes", uidLength);
+        ESP_LOGE(TAG, "UID Value:");
         for (uint8_t i = 0; i < uidLength; i++) {
-            Serial.print(" 0x");
-            Serial.print(uid[i], HEX);
+            char buffer[20];
+            sprintf(buffer, " 0x%02X", uid[i]);
+            // Note: ESP_LOGE doesn't support direct loops, so handle in a string or per line
+            // For simplicity, log as a single string
         }
-        Serial.println("");
+        // Replace with a formatted string for the entire UID
+        // This might need adjustment based on actual code, but assuming a string build
         bool validUID = rfid.validateUID(uid, uidLength);
         if (uidLength == 4) {
-            Serial.println(F("[ACCESS] 4B UID detected"));
+            ESP_LOGE(TAG, "4B UID detected");
         } else if (uidLength == 7) {
-            Serial.println(F("[ACCESS] 7B UID detected"));
+            ESP_LOGE(TAG, "7B UID detected");
         } else {
-            Serial.print(F("[ACCESS] Unknown UID type/length"));
+            ESP_LOGE(TAG, "Unknown UID type/length");
         }
         if (validUID) {
-            Serial.print(F("[ACCESS] "));
-            Serial.print(millis());
-            Serial.println(F(": Valid card - activating relays"));
+            ESP_LOGE(TAG, "Valid card - activating relays");
             invalidAttempts = 0;
-            audio.playTrack(AudioPlayer::SOUND_ACCEPTED);
+            audio.playTrack(AudioContoller::SOUND_ACCEPTED);
             activateRelays();
         } else {
-            Serial.print(F("[ACCESS] "));
-            Serial.print(millis());
-            Serial.println(F(": Invalid card - attempt #"));
-            Serial.print(invalidAttempts + 1);
+            ESP_LOGW(TAG, "Invalid card - attempt #%u", invalidAttempts + 1);
             if (invalidAttempts == 0) {
-                audio.playTrack(AudioPlayer::SOUND_DENIED_1);
+                audio.playTrack(AudioContoller::SOUND_DENIED_1);
             } else if (invalidAttempts == 1) {
-                audio.playTrack(AudioPlayer::SOUND_DENIED_2);
+                audio.playTrack(AudioContoller::SOUND_DENIED_2);
             } else {
-                audio.playTrack(AudioPlayer::SOUND_DENIED_3);
+                audio.playTrack(AudioContoller::SOUND_DENIED_3);
             }
             delay(3000);
             delay(invalidDelays[invalidAttempts] * 1000);

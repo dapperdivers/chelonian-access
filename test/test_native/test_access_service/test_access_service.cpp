@@ -1,8 +1,11 @@
+#include "test_access_service.h"  // Include the new header for test function declarations
+#include <access_service.h>
+#include <esp_log.h>
+#include <test_helpers.h>
 #include <unity.h>
-#include "access_service.h"
-#include "test_helpers.h"
 
 void testInitialState() {
+    ESP_LOGE("TEST", "Starting testInitialState");
     // Check that relays are off and attempts are zero
     TEST_ASSERT_EQUAL(0, invalidAttempts);
     TEST_ASSERT_FALSE(relayActive);
@@ -12,6 +15,7 @@ void testInitialState() {
 }
 
 void testActivateRelays() {
+    ESP_LOGE("TEST", "Starting testActivateRelays");
     // Should set relayActive and state
     activateRelays();
     TEST_ASSERT_TRUE(relayActive);
@@ -19,6 +23,7 @@ void testActivateRelays() {
 }
 
 void testRelaySequence() {
+    ESP_LOGE("TEST", "Starting testRelaySequence");
     // Simulate activating relays and advancing time
     activateRelays();
     unsigned long start = relayActivatedTime;
@@ -36,6 +41,7 @@ void testRelaySequence() {
 }
 
 void testImpatientWaiting() {
+    ESP_LOGE("TEST", "Starting testImpatientWaiting");
     // Reset state
     impatient = false;
     scanned = false;
@@ -48,6 +54,7 @@ void testImpatientWaiting() {
 }
 
 void testInvalidCardDelays() {
+    ESP_LOGE("TEST", "Starting testInvalidCardDelays");
     // Simulate invalid card scans and check delay increments
     invalidAttempts = 0;
     scanned = false;

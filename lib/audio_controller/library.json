@@ -1,0 +1,13 @@
+{
+  "name": "audio_controller",
+  "version": "1.0.0",
+  "description": "Audio Controller Library for Chelonian Access project.",
+  "keywords": ["audio", "JQ6500"],
+  "authors": {
+    "name": "Chelonian Access Team",
+    "email": "team@chelonianaccess.com"
+  },
+  "license": "MIT",
+  "frameworks": "*",
+  "platforms": "*"
+}

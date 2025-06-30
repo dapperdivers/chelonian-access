@@ -1,21 +1,11 @@
+#include <test_helpers.h>  // Provides setUp() and tearDown()
 #include <unity.h>
-#include "test_helpers.h"
+#include "test_audio_player.h"  // Include the test function declarations
 
-// Declare test functions
-void testAudioInitialization();
-void testAudioVolumeControl();
-void testAudioPlayTracks();
-void testAudioTrackConstants();
-void testAudioReset();
-void testAudioStatusMonitoring();
-void testAudioSourceControl();
-void testAudioSourceEnsuresBuiltinOnInit();
-
-// setUp and tearDown are defined in test_helpers.cpp
-
-int main(int /*argc*/, char** /*argv*/) {
+int main(void) {
     UNITY_BEGIN();
 
+    // Run your test functions
     RUN_TEST(testAudioInitialization);
     RUN_TEST(testAudioVolumeControl);
     RUN_TEST(testAudioPlayTracks);

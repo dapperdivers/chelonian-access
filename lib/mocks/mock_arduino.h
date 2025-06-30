@@ -86,7 +86,9 @@ public:
     }
 
     // Additional serial functions
-    void write(uint8_t data) { /* Mock write */ }
+    void write(uint8_t data) {
+        (void)data; /* Mock write */
+    }
     static int available() {
         return 0;
     }
@@ -131,6 +133,7 @@ public:
         return -1;
     }
     size_t write(uint8_t b) {
+        (void)b;
         // Optionally track written bytes for test
         return 1;
     }

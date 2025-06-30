@@ -17,10 +17,16 @@ private:
     bool m_hasCard{false};
 
 public:
+    // Constructor for hardware SPI (SS pin only)
     Adafruit_PN532(uint8_t ss) : m_ss_pin(ss) {}
 
-    void begin() {
+    // Constructor for software SPI (CLK, MISO, MOSI, SS pins)
+    Adafruit_PN532(uint8_t clk, uint8_t miso, uint8_t mosi, uint8_t ss)
+        : m_ss_pin(ss), m_clk_pin(clk), m_miso_pin(miso), m_mosi_pin(mosi) {}
+
+    bool begin() {
         m_initialized = true;
+        return true;  // Mock successful initialization
     }
 
     uint32_t getFirmwareVersion() const {
@@ -63,4 +69,15 @@ public:
     void setFirmwareVersion(uint32_t version) {
         m_firmwareVersion = version;
     }
+    void reset() {
+        // Mock reset functionality
+        m_initialized = false;
+        m_firmwareVersion = 0x0153;  // Reset to default mock version
+        removeMockCard();
+    }
+
+private:
+    uint8_t m_clk_pin{0};
+    uint8_t m_miso_pin{0};
+    uint8_t m_mosi_pin{0};
 };

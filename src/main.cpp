@@ -1,42 +1,15 @@
 #include <Arduino.h>
 #include <access_service.h>
-#include <cstdlib>
-#include <exception>
 #include "esp_log.h"
+#include "exception_handler.h"
 
 static const char* TAG = "Main";
 
-void globalExceptionHandler() {
-    ESP_LOGE(TAG, "\n\n=== UNHANDLED EXCEPTION ===");
-
-    // Print exception info if available
-    if (std::current_exception()) {
-        try {
-            std::rethrow_exception(std::current_exception());
-        } catch (const std::exception& e) {
-            ESP_LOGE(TAG, "Exception Type: %s", e.what());
-        } catch (...) {
-            ESP_LOGE(TAG, "Unknown exception type");
-        }
-    }
-
-// Print stack trace if available (ESP32 specific)
-#ifdef ESP32
-    ESP_LOGE(TAG, "\nStack Trace:");
-#endif
-
-    ESP_LOGE(TAG, "\nSystem will restart in 5 seconds...");
-    delay(5000);
-    ESP.restart();
-}
-
 void setup() {
     // Set global exception handler first
-    std::set_terminate(globalExceptionHandler);
+    setupGlobalExceptionHandler();
 
     Serial.begin(115200);
-    esp_log_level_set("*", ESP_LOG_VERBOSE);  // Explicitly set log level for all tags to VERBOSE
-    esp_log_level_set(TAG, ESP_LOG_VERBOSE);  // Explicitly set log level for "Main" tag
     delay(1000);
 
     ESP_LOGE(TAG, "Chelonian Access Service");

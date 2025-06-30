@@ -16,7 +16,8 @@
         "initializer_list": "cpp",
         "exception": "cpp",
         "cstdlib": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "cstdio": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

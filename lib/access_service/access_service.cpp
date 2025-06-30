@@ -61,6 +61,9 @@ void handleRelaySequence() {
                 ESP_LOGE(TAG, "Relay sequence complete");
             }
             break;
+        default:
+            ESP_LOGE(TAG, "Unhandled relay state: %d", currentRelayState);
+            break;
     }
 }
 

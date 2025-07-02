@@ -49,7 +49,7 @@ jobs:
         pio test -e native
         # Generate coverage info
         lcov --capture --directory .pio/build/native/ --output-file coverage.info
-        lcov --remove coverage.info '/usr/*' '*/test/*' '*/lib/mocks/*' '*/.pio/*' --output-file coverage.info --ignore-errors unused
+        lcov --remove coverage.info '/usr/*' '*/test/*' '*/lib/mocks/*' '*/lib/test_helpers/*' '*/.pio/*' --output-file coverage.info --ignore-errors unused
         lcov --list coverage.info
         echo "--- Inspecting coverage.info for lib/mocks entries ---"
         grep "lib/mocks" coverage.info || echo "No lib/mocks entries found in coverage.info (as expected)."

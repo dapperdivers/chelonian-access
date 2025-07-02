@@ -2,6 +2,7 @@ name: PlatformIO CI
 permissions:
   contents: read
   pull-requests: write
+  security-events: write # Required for uploading SARIF files to Code Scanning
 on:
   push:
     branches: [ main ]
